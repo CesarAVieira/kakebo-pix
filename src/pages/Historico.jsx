@@ -1,4 +1,4 @@
-import Layout from '../layout/Layout'
+import Layout from '../Layout/Layout'
 import { useAuth } from '../context/AuthContext'
 import '../styles/Historico.scss'
 
