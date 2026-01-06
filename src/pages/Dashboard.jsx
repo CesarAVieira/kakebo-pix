@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Layout from '../layout/Layout'
+import Layout from '../Layout/Layout'
 import { useAuth } from '../context/AuthContext'
 import generateValues from '../utils/generateValues'
 import CreateChallengeModal from '../components/CreateChallengeModal'
