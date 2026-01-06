@@ -1,0 +1,790 @@
+/* ===============================
+   HEADER DO COFRE
+================================ */
+
+.grid-header {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  animation: panelAppear 220ms ease-out both;
+}
+
+.grid-header-icon {
+  font-size: 1.8rem;
+}
+
+.grid-header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+    color: #64748b;
+    font-weight: 500;
+    margin: 0;
+  }
+}
+
+/* ===============================
+   PAINEL DE PROGRESSO
+================================ */
+
+.progress-panel h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #111827;
+}
+
+/* Círculo */
+.progress-circle {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  margin: 0 auto 20px;
+}
+
+.progress-circle svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.circle-bg {
+  fill: none;
+  stroke: #e5e7eb;
+  stroke-width: 3.5;
+}
+
+.circle {
+  fill: none;
+  stroke: #3b82f6;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.4s ease;
+}
+
+/* Texto central */
+.progress-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-text strong {
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+
+.progress-text span {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+/* Valores */
+.progress-values {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.progress-values div {
+  background: #f9fafb;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+}
+
+.progress-values span {
+  display: block;
+  font-size: 0.7rem;
+  color: #6b7280;
+}
+
+.progress-values strong {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.progress-values .goal {
+  background: #ecfdf5;
+}
+
+.progress-values .goal strong {
+  color: #16a34a;
+}
+
+/* ===============================
+   PAINEL DE INFORMAÇÕES
+================================ */
+
+.info-panel,
+.actions-panel {
+  opacity: 0.95;
+}
+
+.info-panel h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #111827;
+}
+
+.info-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.info-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background: #f9fafb;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.info-list span {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.info-list strong {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* Status */
+.status {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.status.active {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status.completed {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+/* ===============================
+   PAINEL DE AÇÕES
+================================ */
+
+.actions-panel h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #111827;
+}
+
+.actions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Botões */
+.action-button {
+  width: 100%;
+  padding: 10px 14px;
+
+  border-radius: 10px;
+  border: 1.5px solid #cbd5e1;
+  background: #ffffff;
+
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #111827;
+
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.action-button:hover:not(:disabled) {
+  border-color: #16a34a;
+  background: #f0fdf4;
+}
+
+.action-button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Status */
+.action-status {
+  margin-top: 8px;
+  padding: 10px 12px;
+
+  background: #f9fafb;
+  border-radius: 10px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.action-status span {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.action-status strong {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* ===============================
+   PAINÉIS SUPERIORES
+================================ */
+
+.grid-page {
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.grid-layout {
+  height: 100%;
+  display: flex;
+  margin: 15px;
+  flex-direction: column;
+}
+
+.grid-panels-layout {
+  width: 100%;
+  max-width: 1400px;
+
+  display: grid;
+  grid-template-columns: 2.2fr 1fr 1fr;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "progress player info"
+    "progress actions info";
+
+  gap: 20px;
+
+  margin-bottom: 24px;
+}
+
+.panel-progress {
+  grid-area: progress;
+  animation-delay: 40ms;
+}
+
+.panel-player {
+  grid-area: player;
+  animation-delay: 80ms;
+}
+
+.panel-actions {
+  grid-area: actions;
+  animation-delay: 120ms;
+}
+
+.panel-info {
+  grid-area: info;
+  animation-delay: 160ms;
+}
+
+.panel-actions.compact {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 34px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.panel-actions.compact h3 {
+  display: none;
+}
+
+/* Painel grande da esquerda */
+.panel-progress {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 22px;
+
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.08);
+}
+
+/* Lado direito (Info + Actions lado a lado) */
+.panel-right {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Cards da direita */
+.panel-info,
+.panel-actions {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 16px;
+  opacity: 0.95;
+
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
+}
+
+.panel-progress,
+.panel-player,
+.panel-info,
+.panel-actions {
+  animation: panelAppear 260ms ease-out both;
+}
+
+/* ===============================
+   CONTAINER GRID
+================================ */
+
+.grid-container {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+
+  animation: gridFocus 260ms ease-out;
+}
+
+.grid-container:hover {
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.12);
+}
+
+/* ===============================
+   GRID
+================================ */
+
+.grid {
+  display: grid;
+  height: 100%;
+  max-height: 100%;
+  gap: 10px;
+  justify-content: center;
+  align-content: center;
+  transform: translateZ(0);
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+}
+
+.grid.progress-50 .cell:not(.paid) {
+  opacity: 0.95;
+}
+
+.grid.progress-75 .cell:not(.paid) {
+  box-shadow: inset 0 0 0 1px rgba(34, 197, 94, 0.15);
+}
+
+.grid.progress-100 {
+  animation: celebrate 0.6s ease;
+}
+
+.focus-mode {
+  .grid-header,
+  .grid-panels-layout {
+    opacity: 0.2;
+    pointer-events: none;
+  }
+
+  .grid-container {
+    box-shadow: 0 0 0 2px #22c55e;
+  }
+
+  .grid {
+    transform: scale(1.04);
+  }
+}
+
+/* ===============================
+   LEGENDA DE RARIDADE
+================================ */
+
+/* Wrapper da grid + legenda */
+.grid-container-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.grid-legend {
+  align-self: flex-end;
+  margin-top: 6px;
+  margin-right: 6px;
+
+  display: flex;
+  gap: 16px;
+
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #374151;
+
+  opacity: 0.85;
+  transform: translateY(6px);
+  animation: legendAppear 220ms ease-out forwards;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #64748b;
+
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.legend-item:hover {
+  transform: translateY(-1px);
+  opacity: 0.85;
+}
+
+/* Pontinho de cor */
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+/* Cores iguais às células */
+
+.legend-item.common .legend-dot {
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+}
+
+.legend-item.rare .legend-dot {
+  background: linear-gradient(135deg, #98f0b5, #a8f3bb);
+  border: 1px solid #15fa74;
+}
+
+.legend-item.legendary .legend-dot {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  border: 1px solid #facc15;
+}
+
+/* Respeita acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+  .grid-legend {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* 🖥️ Desktop grande */
+@media (min-width: 1200px) {
+  .grid {
+    grid-template-columns: repeat(32, 1fr);
+    width: min(1800px, 95vw);
+  }
+}
+
+/* 💻 Notebook */
+@media (max-width: 1199px) and (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(16, 1fr);
+    width: min(1000px, 95vw);
+  }
+}
+
+/* 📱 Tablet */
+@media (max-width: 899px) and (min-width: 600px) {
+  .grid {
+    grid-template-columns: repeat(8, 1fr);
+    width: min(420px, 95vw);
+    overflow-y: auto;
+  }
+}
+
+/* 📱 Mobile */
+@media (max-width: 599px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+    width: min(280px, 95vw);
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 900px) {
+  .grid-panels-layout {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "progress"
+      "player"
+      "actions"
+      "info";
+  }
+}
+
+.cell {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.cell:not(.paid):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  background: #ffffff;
+}
+
+.cell.common {
+  background: #f8fafc;
+}
+
+.cell.rare {
+  background: linear-gradient(135deg, #98f0b5, #a8f3bb);
+  box-shadow: inset 0 0 0 1px #15fa74;
+}
+
+.cell.legendary {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  box-shadow: inset 0 0 0 1px #facc15;
+}
+
+/* ===============================
+   VALOR CENTRAL
+================================ */
+
+.cell-value {
+  font-weight: 500;
+  font-size: clamp(0.9rem, 1.4vw, 1.5rem);
+  color: #111827;
+
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* ===============================
+   CELL SPARKLES (HOVER FX)
+================================ */
+
+.cell .sparkle {
+  animation: none;
+}
+
+.cell-sparkles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.sparkle {
+  position: absolute;
+  width: 14px;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+}
+
+.sparkle path {
+  fill: rgba(255, 255, 255, 0.35);
+}
+
+.cell.rare .sparkle path {
+  fill: rgba(59, 246, 131, 0.8);
+}
+
+.cell.legendary .sparkle path {
+  fill: rgba(250, 204, 21, 0.9);
+}
+
+/* Hover trigger */
+.cell:not(.paid):hover .sparkle {
+  animation: sparkle-pop 0.75s forwards;
+}
+
+/* Positions + delays */
+.sparkle-1 {
+  top: 20%;
+  left: 15%;
+  animation-delay: 0s;
+}
+.sparkle-2 {
+  top: 75%;
+  left: 30%;
+  animation-delay: 0.1s;
+}
+.sparkle-3 {
+  top: 35%;
+  left: 55%;
+  animation-delay: 0.15s;
+}
+.sparkle-4 {
+  top: 65%;
+  left: 75%;
+  animation-delay: 0.2s;
+}
+.sparkle-5 {
+  top: 25%;
+  left: 85%;
+  animation-delay: 0.25s;
+}
+
+/* ===============================
+   CÉLULA PAGA
+================================ */
+
+.cell.paid {
+  background: #dcfce7;
+  color: #166534;
+  border-color: #22c55e;
+  cursor: default;
+  animation: paidPop 180ms ease-out;
+}
+
+.cell.paid .cell-value,
+.cell.paid .cell-currency {
+  color: #ffffff;
+}
+
+.cell.paid::after {
+  content: "✔";
+  position: absolute;
+  font-size: 0.9rem;
+  color: #16a34a;
+}
+
+/* ===============================
+   BOTÃO VOLTAR
+================================ */
+
+.back-inline {
+  background: none;
+  border: none;
+
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #2563eb;
+
+  cursor: pointer;
+  padding: 0;
+  margin-right: 8px;
+
+  transition: opacity 0.15s ease;
+}
+
+.back-inline:hover {
+  opacity: 0.7;
+}
+
+/* ===============================
+   ANIMAÇÕES
+================================ */
+
+@keyframes gridFocus {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes paidPop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes celebrate {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.01);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes panelAppear {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes sparkle-pop {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes legendAppear {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,24 @@
+.navbar {
+  height: 60px;
+  background: #111827;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+}
+
+.navbar h1 {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.nav-actions a {
+  color: #fff;
+  text-decoration: none;
+  margin-left: 16px;
+}
+
+.nav-actions a.active {
+  border-bottom: 2px solid #22c55e;
+}

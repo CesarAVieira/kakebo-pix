@@ -1,0 +1,377 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import "../../styles/colors";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+.wrapper {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at top, $bg-soft, $white 70%);
+}
+
+.container {
+  position: relative;
+  width: 850px;
+  height: 550px;
+  background: #fff;
+  border-radius: 30px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  margin: 20px;
+}
+
+.container h1 {
+  font-size: 36px;
+  margin: -10px 0;
+}
+
+/* ================= FORM BOX ================= */
+
+.formBox {
+  position: absolute;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  padding: 40px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #333;
+  transition: 0.6s ease-in-out 1.2s, visibility 0s 1s;
+}
+
+.login {
+  visibility: visible;
+  z-index: 2;
+}
+
+.register {
+  visibility: hidden;
+  z-index: 1;
+}
+
+.active .login {
+  visibility: hidden;
+  z-index: 1;
+}
+
+.active .register {
+  visibility: visible;
+  z-index: 2;
+}
+
+.active .formBox {
+  right: 50%;
+}
+
+/* ================= FORM ================= */
+
+.form {
+  width: 100%;
+}
+
+.title {
+  font-size: 36px;
+  margin-bottom: 10px;
+  color: $green-600;
+}
+
+.text {
+  font-size: 14px;
+  margin: 15px 0;
+}
+
+/* ================= INPUT ================= */
+
+.inputBox {
+  position: relative;
+  margin: 30px 0;
+}
+
+.inputBox input {
+  width: 100%;
+  padding: 13px 50px 13px 20px;
+  background: #eee;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+}
+
+.inputBox i {
+  position: absolute;
+  right: 20px;
+  top: 40%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  color: #888;
+}
+
+/* ================= BUTTON ================= */
+
+.btn {
+  width: 100%;
+  height: 48px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: $white;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.btnTogglePanel {
+  width: 160px;
+  height: 46px;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  border: 2px solid #fff;
+  box-shadow: none;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ================= FORGOT BUTTON ================= */
+
+.forgot {
+  margin: -15px 0 15px;
+  text-align: center;
+}
+
+.forgot a {
+  font-size: 14px;
+  text-decoration: none;
+  color: #333;
+}
+
+.forgot button {
+  background: none;
+  border: none;
+  color: #333;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.forgot button:hover {
+  text-decoration: underline;
+}
+
+/* ================= RESET MODAL ================= */
+
+.resetOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.resetBox {
+  background: #fff;
+  padding: 30px;
+  border-radius: 16px;
+  width: 320px;
+  text-align: center;
+}
+
+.resetBox input {
+  width: 100%;
+  padding: 10px;
+  margin: 15px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.resetActions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.resetActions button {
+  flex: 1;
+  margin: 0 5px;
+  height: 40px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.resetActions button:first-child {
+  background: #7494ec;
+  color: #fff;
+}
+
+/* ================= SOCIAL ================= */
+
+.social {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.social button {
+  width: 44px;
+  height: 44px;
+  background: $white;
+  border: 2px solid $border-light;
+  color: $text-muted-strong;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 22px;
+  margin: 0 6px;
+}
+
+.social button i {
+  margin-top: 5px;
+}
+
+.social button:hover {
+  background: $bg-soft;
+  border-color: $green-500;
+  color: $green-600;
+}
+
+/* ================= TOGGLE ================= */
+
+.toggleBox {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.toggleBox h1 {
+  font-size: 36px;
+  margin: 10px 0;
+}
+
+.toggleBox p {
+  font-size: 14.5px;
+  margin: 15px 0;
+}
+
+.toggleBox::before {
+  content: "";
+  position: absolute;
+  left: -250%;
+  width: 300%;
+  height: 100%;
+  background: linear-gradient(135deg, $green-600, $green-500);
+  border-radius: 150px;
+  z-index: 3;
+  transition: 1.8s ease-in-out;
+}
+
+.active .toggleBox::before {
+  left: 50%;
+}
+
+.togglePanel {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  z-index: 4;
+  transition: 0.6s ease-in-out;
+}
+
+.left {
+  left: 0;
+  transition-delay: 1.2s;
+}
+
+.active .left {
+  left: -50%;
+  transition-delay: 0.6s;
+}
+
+.right {
+  right: -50%;
+  transition-delay: 0.6s;
+}
+
+.active .right {
+  right: 0;
+  transition-delay: 1.2s;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media screen and (max-width: 650px) {
+  .container {
+    height: calc(100vh - 40px);
+  }
+
+  .formBox {
+    width: 100%;
+    height: 70%;
+    bottom: 0;
+  }
+
+  .toggleBox::before {
+    left: 0;
+    top: -270%;
+    width: 100%;
+    height: 300%;
+    border-radius: 20vw;
+  }
+
+  .container.active .toggleBox::before {
+    left: 0;
+    top: 70%;
+  }
+
+  .active .formBox {
+    right: 0;
+    bottom: 30%;
+  }
+
+  .togglePanel {
+    width: 100%;
+    height: 30%;
+  }
+
+  .togglePanel.left {
+    top: 0;
+  }
+
+  .container.active .togglePanel.left {
+    left: 0;
+    top: -30%;
+  }
+
+  .togglePanel.right {
+    right: 0;
+    bottom: -30%;
+  }
+
+  .container.active .togglePanel.right {
+    bottom: 0;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .formBox {
+    padding: 20px;
+  }
+
+  .togglePanel h1 {
+    font-size: 30px;
+  }
+}

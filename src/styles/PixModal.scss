@@ -1,0 +1,120 @@
+/* =========================
+   BACKDROP
+========================= */
+
+.pix-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1300;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.pix-modal {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+
+  h2 {
+    margin-bottom: 12px;
+    font-size: 1.4rem;
+  }
+
+  p {
+    margin-bottom: 16px;
+    color: #475569;
+    font-size: 0.95rem;
+
+    strong {
+      color: #111827;
+    }
+  }
+
+  canvas {
+    margin: 12px auto 16px;
+    display: block;
+  }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: opacity 0.15s ease;
+  }
+
+  button:hover {
+    opacity: 0.9;
+  }
+
+  .copy {
+    background: #2563eb;
+    color: #ffffff;
+  }
+}
+
+/* =========================
+   AÇÕES
+========================= */
+
+.pix-modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+
+  button {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: 600;
+  }
+
+  .cancel {
+    background: #e5e7eb;
+    color: #111827;
+  }
+
+  .confirm {
+    background: #22c55e;
+    color: #ffffff;
+  }
+}
+
+.pix-copy-feedback {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: #16a34a;
+  animation: fadeInOut 2s ease forwards;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
