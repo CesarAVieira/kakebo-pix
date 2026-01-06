@@ -14,7 +14,7 @@ import XpFloat from '../components/XpFloat'
 import LevelUpModal from '../components/LevelUpModal'
 import Cell from './Cell'
 import PixModal from './PixModal'
-import pork from '../assets/pork.png'
+import Pork from '../assets/pork.png'
 import './grid.scss'
 import '../styles/gamification.scss'
 
@@ -140,7 +140,7 @@ export default function Grid() {
 
                     <Box
                         component="img"
-                        src={pork}
+                        src={Pork}
                         alt="Porquinho"
                         sx={{ height: 56 }}
                     />
