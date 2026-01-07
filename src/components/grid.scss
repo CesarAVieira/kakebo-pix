@@ -326,11 +326,21 @@
 
 /* Painel grande da esquerda */
 .panel-progress {
+  position: relative;
+  overflow: hidden;
   background: #ffffff;
   border-radius: 16px;
   padding: 22px;
 
   box-shadow: 0 10px 26px rgba(0, 0, 0, 0.08);
+
+  .panel-content {
+    animation: fadeScale 0.35s ease;
+  }
+
+  &.scratch-mode {
+    background: linear-gradient(135deg, #1f2933, #111827);
+  }
 }
 
 /* Lado direito (Info + Actions lado a lado) */
@@ -356,6 +366,35 @@
 .panel-info,
 .panel-actions {
   animation: panelAppear 260ms ease-out both;
+}
+
+.scratch-toggle {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 5;
+
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+
+  background: linear-gradient(135deg, #facc15, #f97316);
+  color: #111;
+  font-size: 20px;
+
+  border: none;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  transition: all 0.25s ease;
+
+  &:hover {
+    transform: scale(1.1) rotate(-5deg);
+  }
 }
 
 /* ===============================
@@ -786,5 +825,16 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes fadeScale {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }

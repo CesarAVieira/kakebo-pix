@@ -14,6 +14,7 @@ import XpFloat from '../components/XpFloat'
 import LevelUpModal from '../components/LevelUpModal'
 import Cell from './Cell'
 import PixModal from './PixModal'
+import ScratchCard from '../components/ScratchCard'
 import pork from '../assets/pork.png'
 import './grid.scss'
 import '../styles/gamification.scss'
@@ -26,6 +27,7 @@ export default function Grid() {
 
     const challenges = user?.challenges || []
     const challenge = challenges.find(c => c.id === id)
+    const [showScratch, setShowScratch] = useState(false)
     const [xpFloat, setXpFloat] = useState(null)
     const [levelUp, setLevelUp] = useState(null)
 
@@ -159,9 +161,28 @@ export default function Grid() {
         ================================ */}
                 <div className="grid-panels-layout">
 
-                    <div className="panel-progress">
-                        <ProgressPanel challenge={challenge} />
+                    <div className={`panel-progress ${showScratch ? 'scratch-mode' : ''}`}>
+
+                        <button
+                            className="scratch-toggle"
+                            onClick={() => setShowScratch(prev => !prev)}
+                            title="Abrir raspadinha"
+                        >
+                            🎁
+                        </button>
+
+                        <div className="panel-content">
+                            {showScratch ? (
+                                <ScratchCard
+                                    hiddenContent="💰 Bônus desbloqueado!"
+                                    revealThreshold={65}
+                                />
+                            ) : (
+                                <ProgressPanel challenge={challenge} />
+                            )}
+                        </div>
                     </div>
+
 
                     <div className="panel-player">
                         <PlayerPanel />
