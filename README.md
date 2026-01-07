@@ -9,17 +9,3 @@ Kakebo Pix es una aplicación fintech de gestión financiera personal que convie
 🇺🇸 English — Short Pitch
 
 Kakebo Pix is a fintech application for personal finance management that turns savings goals into a simple, visual, and action-driven experience powered by PIX. Inspired by the Japanese Kakebo method, the product helps users build financial discipline through clear goals, real-time progress, and small, executable financial decisions.
-
-🎯 Versão Ultra-Compacta (One-liner opcional)
-
-PT:
-
-Economia inteligente, visual e orientada a metas — via PIX.
-
-ES:
-
-Ahorro inteligente, visual y orientado a objetivos — con PIX.
-
-EN:
-
-Smart, visual, goal-driven savings — powered by PIX.
