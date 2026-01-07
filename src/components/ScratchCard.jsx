@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import './ScratchCard.scss';
+import '../styles/ScratchCard.scss';
 
 const ScratchCard = ({
     hiddenContent = '🎉 Você Ganhou!',
