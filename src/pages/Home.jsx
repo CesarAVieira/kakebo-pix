@@ -87,7 +87,7 @@ export default function Home() {
         const container = document.querySelector('.coins-background')
         if (!container) return
 
-        const MAX_COINS = isMobile ? 6 : 14
+        const MAX_COINS = isMobile ? 4 : 14
 
         const coins = []
         const timeScale = isMobile ? 0.25 : 0.45
@@ -164,12 +164,18 @@ export default function Home() {
             }
 
             coins.forEach(coin => {
-                /* ====== GRAVIDADE ====== */
-                coin.velocityY += coin.gravity * timeScale
-                coin.y += coin.velocityY * timeScale
+                if (isMobile) {
+                    // ===== MOBILE: animação simples =====
+                    coin.y += 0.6
+                    if (coin.y > floor) {
+                        coin.y = -coin.size - Math.random() * 100
+                        coin.x = Math.random() * (containerRect.width - coin.size)
+                    }
+                } else {
+                    // ===== DESKTOP: física completa =====
+                    coin.velocityY += coin.gravity * timeScale
+                    coin.y += coin.velocityY * timeScale
 
-                /* ====== MOUSE INTERACTION ====== */
-                if (!isMobile) {
                     const influenceRadius = 90
                     const pushStrength = 0.45
 
@@ -183,54 +189,35 @@ export default function Home() {
 
                     if (distance < influenceRadius) {
                         const force = (1 - distance / influenceRadius) * pushStrength
-
                         coin.velocityX += (dx / distance) * force
                         coin.velocityY -= force * 0.15
                     }
-                }
 
-                /* ====== MOVIMENTO HORIZONTAL ====== */
-                coin.x += coin.velocityX * timeScale
-                coin.velocityX *= coin.friction
+                    coin.x += coin.velocityX * timeScale
+                    coin.velocityX *= coin.friction
 
-                /* ====== CHÃO ====== */
-                if (coin.y >= floor) {
-                    coin.y = floor
-
-                    if (coin.bounceCount < coin.maxBounces) {
-                        coin.velocityY *= -coin.bounce
-                        coin.bounceCount++
-
-                        if (coin.isBig && coin.bounceCount === 0 && coin.y >= floor - 1) {
-                            if (coin.sparkleCooldown <= 0) {
-                                coin.el.classList.add('has-sparkle')
-                                coin.sparkleCooldown = 120
-                            }
+                    if (coin.y >= floor) {
+                        coin.y = floor
+                        if (coin.bounceCount < coin.maxBounces) {
+                            coin.velocityY *= -coin.bounce
+                            coin.bounceCount++
+                        } else {
+                            coin.y = -coin.size - Math.random() * 120
+                            coin.velocityY = Math.random() * 0.3 + 0.12
+                            coin.velocityX = 0
+                            coin.bounceCount = 0
+                            coin.x = Math.random() * (containerRect.width - coin.size)
                         }
-                    } else {
-                        coin.y = -coin.size - Math.random() * 120
-                        coin.velocityY = Math.random() * 0.3 + 0.12
-                        coin.velocityX = 0
-                        coin.bounceCount = 0
-
-                        coin.x = Math.random() * (containerRect.width - coin.size)
                     }
                 }
 
-                /* ====== SPARKLE ====== */
-                if (coin.sparkleCooldown > 0) {
-                    coin.sparkleCooldown--
-                    if (coin.sparkleCooldown === 45) {
-                        coin.el.classList.remove('has-sparkle')
-                    }
-                }
-
-                /* ====== TRANSFORM FINAL ====== */
-                coin.el.style.transform = `translate(${coin.x}px, ${coin.y}px)`
+                // TRANSFORM FINAL (GPU friendly)
+                coin.el.style.transform = `translate3d(${coin.x}px, ${coin.y}px, 0)`
             })
 
             rafId = requestAnimationFrame(animate)
         }
+
 
         animate()
 

@@ -519,6 +519,7 @@
     pointer-events: none;
     z-index: 2;
     will-change: transform;
+    backface-visibility: hidden;
   }
 
   .coin-img {
