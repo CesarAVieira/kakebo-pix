@@ -23,9 +23,13 @@ O Kakebo Pix nasce como um produto fintech digital-first, pensado para evoluir e
 💡 Proposta de Valor
 
 ✔️ Torna o hábito de poupar menos abstrato
+
 ✔️ Incentiva disciplina financeira com feedback visual
+
 ✔️ Simplifica o controle de metas via PIX
+
 ✔️ Reduz fricção entre intenção e ação
+
 ✔️ Funciona como um cofre digital orientado a objetivos
 
 🧩 Funcionalidades Atuais
