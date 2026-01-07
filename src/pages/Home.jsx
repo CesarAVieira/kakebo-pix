@@ -10,7 +10,6 @@ export default function Home() {
     const navigate = useNavigate()
 
     const heroRef = useRef(null)
-    const logoRef = useRef(null)
 
     const isAuthenticated = !!user
     useEffect(() => {
@@ -40,10 +39,6 @@ export default function Home() {
 
             if (heroRef.current) {
                 heroRef.current.style.transform = `translateY(${scrollY * 0.15}px)`
-            }
-
-            if (logoRef.current) {
-                logoRef.current.style.transform = `translateY(${scrollY * 0.25}px)`
             }
         }
 

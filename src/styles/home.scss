@@ -27,8 +27,7 @@
 
     .logo img {
       height: 60px;
-      animation: float 6s ease-in-out infinite, glow 3.5s ease-in-out infinite;
-      will-change: transform, filter;
+      animation: logoEnter 600ms ease-out both;
     }
 
     button {
@@ -590,6 +589,18 @@
 }
 
 /* ANIMATIONS */
+
+@keyframes logoEnter {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes sparkle {
   0% {
     opacity: 0;
@@ -683,35 +694,6 @@
   .coin-img {
     animation: none !important;
     display: none;
-  }
-}
-
-/* FLOAT */
-@keyframes float {
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-14px);
-  }
-  100% {
-    transform: translateY(0);
-  }
-}
-
-/* GLOW */
-@keyframes glow {
-  0% {
-    filter: drop-shadow(0 0 0 rgba(34, 197, 94, 0))
-      drop-shadow(0 0 0 rgba(59, 130, 246, 0));
-  }
-  50% {
-    filter: drop-shadow(0 0 26px rgba(34, 197, 94, 0.5))
-      drop-shadow(0 0 18px rgba(59, 130, 246, 0.35));
-  }
-  100% {
-    filter: drop-shadow(0 0 0 rgba(34, 197, 94, 0))
-      drop-shadow(0 0 0 rgba(59, 130, 246, 0));
   }
 }
 
