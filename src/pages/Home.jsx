@@ -81,12 +81,16 @@ export default function Home() {
         return () => observer.disconnect()
     }, [])
 
+    const isMobile = window.matchMedia('(max-width: 768px)').matches
+
     useEffect(() => {
         const container = document.querySelector('.coins-background')
         if (!container) return
 
+        const MAX_COINS = isMobile ? 6 : 14
+
         const coins = []
-        const timeScale = 0.45
+        const timeScale = isMobile ? 0.25 : 0.45
 
         const containerRect = container.getBoundingClientRect()
         const floor = containerRect.height - 10
@@ -136,35 +140,53 @@ export default function Home() {
             }
         }
 
-        for (let i = 0; i < 14; i++) {
+        for (let i = 0; i < MAX_COINS; i++) {
             coins.push(createCoin())
         }
+
+        let isVisible = true
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                isVisible = entry.isIntersecting
+            },
+            { threshold: 0.1 }
+        )
+
+        observer.observe(container)
 
         let rafId
 
         const animate = () => {
+            if (!isVisible) {
+                rafId = requestAnimationFrame(animate)
+                return
+            }
+
             coins.forEach(coin => {
                 /* ====== GRAVIDADE ====== */
                 coin.velocityY += coin.gravity * timeScale
                 coin.y += coin.velocityY * timeScale
 
                 /* ====== MOUSE INTERACTION ====== */
-                const influenceRadius = 90
-                const pushStrength = 0.45
+                if (!isMobile) {
+                    const influenceRadius = 90
+                    const pushStrength = 0.45
 
-                const rect = coin.el.getBoundingClientRect()
-                const cx = rect.left + rect.width / 2
-                const cy = rect.top + rect.height / 2
+                    const rect = coin.el.getBoundingClientRect()
+                    const cx = rect.left + rect.width / 2
+                    const cy = rect.top + rect.height / 2
 
-                const dx = cx - mouse.x
-                const dy = cy - mouse.y
-                const distance = Math.sqrt(dx * dx + dy * dy)
+                    const dx = cx - mouse.x
+                    const dy = cy - mouse.y
+                    const distance = Math.sqrt(dx * dx + dy * dy)
 
-                if (distance < influenceRadius) {
-                    const force = (1 - distance / influenceRadius) * pushStrength
+                    if (distance < influenceRadius) {
+                        const force = (1 - distance / influenceRadius) * pushStrength
 
-                    coin.velocityX += (dx / distance) * force
-                    coin.velocityY -= force * 0.15
+                        coin.velocityX += (dx / distance) * force
+                        coin.velocityY -= force * 0.15
+                    }
                 }
 
                 /* ====== MOVIMENTO HORIZONTAL ====== */
@@ -209,7 +231,6 @@ export default function Home() {
 
             rafId = requestAnimationFrame(animate)
         }
-
 
         animate()
 
