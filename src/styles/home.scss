@@ -517,8 +517,11 @@
     height: var(--size);
     pointer-events: none;
     z-index: 2;
-    will-change: transform;
     backface-visibility: hidden;
+  }
+
+  .coin.big {
+    will-change: transform;
   }
 
   .coin-img {
@@ -532,14 +535,10 @@
     filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.65));
   }
 
-  .coin:hover .coin-img {
-    filter: drop-shadow(0 0 14px rgba(255, 215, 0, 0.9));
-  }
-
   .coin.has-sparkle::after {
     content: "";
     position: absolute;
-    inset: -40%;
+    inset: -30%;
     z-index: 5;
 
     background: radial-gradient(
@@ -550,7 +549,7 @@
       rgba(255, 215, 0, 0) 65%
     );
 
-    animation: sparkleBurst 0.9s ease-out forwards;
+    animation: sparkleBurst 0.6s ease-out forwards;
     pointer-events: none;
   }
 
@@ -573,7 +572,7 @@
 
     mix-blend-mode: screen;
 
-    animation: sparkleCross 0.9s ease-out forwards;
+    animation: sparkleCross 0.6s ease-out forwards;
     pointer-events: none;
   }
 
@@ -714,5 +713,45 @@
 @media (max-width: 768px) {
   .hero .logo img {
     height: 160px;
+  }
+}
+
+@media (max-width: 768px) {
+  .coin-img {
+    animation: spin var(--spin) linear infinite;
+    filter: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-card {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(236, 253, 245, 0.95);
+  }
+}
+
+@media (max-width: 768px) {
+  /* Reduz custo gráfico */
+  .coin-img {
+    animation: spin var(--spin) linear infinite;
+    filter: none;
+  }
+
+  .coin.big {
+    will-change: transform;
+  }
+
+  .hero-card {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(236, 253, 245, 0.95);
+  }
+}
+
+@media (max-width: 768px) {
+  .coin.has-sparkle::before,
+  .coin.has-sparkle::after {
+    display: none;
   }
 }

@@ -159,34 +159,16 @@ export default function Home() {
             }
 
             coins.forEach(coin => {
+                /* ====== MOVIMENTO ====== */
                 if (isMobile) {
-                    // ===== MOBILE: animação simples =====
                     coin.y += 0.6
                     if (coin.y > floor) {
                         coin.y = -coin.size - Math.random() * 100
                         coin.x = Math.random() * (containerRect.width - coin.size)
                     }
                 } else {
-                    // ===== DESKTOP: física completa =====
                     coin.velocityY += coin.gravity * timeScale
                     coin.y += coin.velocityY * timeScale
-
-                    const influenceRadius = 90
-                    const pushStrength = 0.45
-
-                    const rect = coin.el.getBoundingClientRect()
-                    const cx = rect.left + rect.width / 2
-                    const cy = rect.top + rect.height / 2
-
-                    const dx = cx - mouse.x
-                    const dy = cy - mouse.y
-                    const distance = Math.sqrt(dx * dx + dy * dy)
-
-                    if (distance < influenceRadius) {
-                        const force = (1 - distance / influenceRadius) * pushStrength
-                        coin.velocityX += (dx / distance) * force
-                        coin.velocityY -= force * 0.15
-                    }
 
                     coin.x += coin.velocityX * timeScale
                     coin.velocityX *= coin.friction
@@ -206,9 +188,26 @@ export default function Home() {
                     }
                 }
 
-                // TRANSFORM FINAL (GPU friendly)
+                /* ====== SPARKLE TRIGGER (NOVO) ====== */
+                if (!isMobile && coin.isBig && Math.random() < 0.002) {
+                    if (coin.sparkleCooldown <= 0) {
+                        coin.el.classList.add('has-sparkle')
+                        coin.sparkleCooldown = 120
+                    }
+                }
+
+                /* ====== SPARKLE COOLDOWN ====== */
+                if (coin.sparkleCooldown > 0) {
+                    coin.sparkleCooldown--
+                    if (coin.sparkleCooldown === 45) {
+                        coin.el.classList.remove('has-sparkle')
+                    }
+                }
+
+                /* ====== TRANSFORM FINAL ====== */
                 coin.el.style.transform = `translate3d(${coin.x}px, ${coin.y}px, 0)`
             })
+
 
             rafId = requestAnimationFrame(animate)
         }
