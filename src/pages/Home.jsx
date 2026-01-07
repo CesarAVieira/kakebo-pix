@@ -18,15 +18,12 @@ export default function Home() {
         }
     }, [user, navigate])
 
-    const mouse = {
-        x: -9999,
-        y: -9999
-    }
+    const mouseRef = useRef({ x: -9999, y: -9999 })
 
     useEffect(() => {
         const handleMouseMove = (e) => {
-            mouse.x = e.clientX
-            mouse.y = e.clientY
+            mouseRef.current.x = e.clientX
+            mouseRef.current.y = e.clientY
         }
 
         window.addEventListener('mousemove', handleMouseMove)
@@ -159,9 +156,13 @@ export default function Home() {
             }
 
             coins.forEach(coin => {
-                /* ====== MOVIMENTO ====== */
+                /* =====================
+                   MOVIMENTO
+                ===================== */
+
                 if (isMobile) {
                     coin.y += 0.6
+
                     if (coin.y > floor) {
                         coin.y = -coin.size - Math.random() * 100
                         coin.x = Math.random() * (containerRect.width - coin.size)
@@ -170,11 +171,41 @@ export default function Home() {
                     coin.velocityY += coin.gravity * timeScale
                     coin.y += coin.velocityY * timeScale
 
+                    /* =====================
+                       INTERAÇÃO COM MOUSE
+                    ===================== */
+
+                    const influenceRadius = 110
+                    const pushStrength = 0.75
+
+                    const rect = coin.el.getBoundingClientRect()
+                    const cx = rect.left + rect.width / 2
+                    const cy = rect.top + rect.height / 2
+
+                    const dx = cx - mouseRef.current.x
+                    const dy = cy - mouseRef.current.y
+                    const distance = Math.sqrt(dx * dx + dy * dy)
+
+                    if (distance < influenceRadius) {
+                        const force = (1 - distance / influenceRadius) * pushStrength
+                        coin.velocityX += (dx / distance) * force
+                        coin.velocityY -= force * 0.18
+                    }
+
+                    /* =====================
+                       MOVIMENTO HORIZONTAL
+                    ===================== */
+
                     coin.x += coin.velocityX * timeScale
                     coin.velocityX *= coin.friction
 
+                    /* =====================
+                       CHÃO / RESET
+                    ===================== */
+
                     if (coin.y >= floor) {
                         coin.y = floor
+
                         if (coin.bounceCount < coin.maxBounces) {
                             coin.velocityY *= -coin.bounce
                             coin.bounceCount++
@@ -186,17 +217,23 @@ export default function Home() {
                             coin.x = Math.random() * (containerRect.width - coin.size)
                         }
                     }
-                }
 
-                /* ====== SPARKLE TRIGGER (NOVO) ====== */
-                if (!isMobile && coin.isBig && Math.random() < 0.002) {
-                    if (coin.sparkleCooldown <= 0) {
-                        coin.el.classList.add('has-sparkle')
-                        coin.sparkleCooldown = 120
+                    /* =====================
+                       SPARKLE (DESKTOP)
+                    ===================== */
+
+                    if (coin.isBig && Math.random() < 0.002) {
+                        if (coin.sparkleCooldown <= 0) {
+                            coin.el.classList.add('has-sparkle')
+                            coin.sparkleCooldown = 120
+                        }
                     }
                 }
 
-                /* ====== SPARKLE COOLDOWN ====== */
+                /* =====================
+                   SPARKLE COOLDOWN
+                ===================== */
+
                 if (coin.sparkleCooldown > 0) {
                     coin.sparkleCooldown--
                     if (coin.sparkleCooldown === 45) {
@@ -204,13 +241,16 @@ export default function Home() {
                     }
                 }
 
-                /* ====== TRANSFORM FINAL ====== */
+                /* =====================
+                   TRANSFORM FINAL
+                ===================== */
+
                 coin.el.style.transform = `translate3d(${coin.x}px, ${coin.y}px, 0)`
             })
 
-
             rafId = requestAnimationFrame(animate)
         }
+
 
 
         animate()
