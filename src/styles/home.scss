@@ -734,8 +734,8 @@
 @media (max-width: 768px) {
   /* Reduz custo gráfico */
   .coin-img {
-    animation: spin var(--spin) linear infinite;
-    filter: none;
+    animation: spin var(--spin) linear infinite !important;
+    filter: none !important;
   }
 
   .coin.big {
