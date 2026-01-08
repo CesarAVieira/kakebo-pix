@@ -28,6 +28,7 @@ export default function Grid() {
     const challenges = user?.challenges || []
     const challenge = challenges.find(c => c.id === id)
     const [showScratch, setShowScratch] = useState(false)
+    const [scratchCell, setScratchCell] = useState(null)
     const [xpFloat, setXpFloat] = useState(null)
     const [levelUp, setLevelUp] = useState(null)
 
@@ -165,22 +166,47 @@ export default function Grid() {
 
                         <button
                             className="scratch-toggle"
-                            onClick={() => setShowScratch(prev => !prev)}
-                            title="Abrir raspadinha"
+                            onClick={() => {
+                                const unpaidCells = challenge.grid
+                                    .map((cell, index) => ({ ...cell, index }))
+                                    .filter(cell => !cell.paid)
+
+                                if (unpaidCells.length === 0) {
+                                    alert('Não há valores pendentes 🎉')
+                                    return
+                                }
+
+                                const randomIndex = Math.floor(Math.random() * unpaidCells.length)
+                                const selected = unpaidCells[randomIndex]
+
+                                setScratchCell(selected)
+                                setShowScratch(true)
+                            }}
                         >
                             🎁
                         </button>
 
-                        <div className="panel-content">
-                            {showScratch ? (
-                                <ScratchCard
-                                    hiddenContent="💰 Bônus desbloqueado!"
-                                    revealThreshold={65}
-                                />
-                            ) : (
-                                <ProgressPanel challenge={challenge} />
-                            )}
-                        </div>
+                        {showScratch && scratchCell ? (
+                            <ScratchCard
+                                hiddenContent={
+                                    `💸 O valor a ser pago hoje é R$ ${scratchCell.value.toFixed(2)}`
+                                }
+                                revealThreshold={65}
+                                onComplete={() => {
+                                    // abre PixModal automaticamente
+                                    setSelectedCell({
+                                        ...scratchCell,
+                                        xpPosition: { x: window.innerWidth / 2, y: 120 }
+                                    })
+
+                                    // fecha Scratch
+                                    setShowScratch(false)
+                                    setScratchCell(null)
+                                }}
+                            />
+                        ) : (
+                            <ProgressPanel challenge={challenge} />
+                        )}
                     </div>
 
 

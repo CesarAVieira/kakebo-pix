@@ -5,7 +5,8 @@ const ScratchCard = ({
     hiddenContent = '🎉 Você Ganhou!',
     coverColor = '#888888',
     scratchRadius = 30,
-    revealThreshold = 70 // porcentagem
+    revealThreshold = 70, // porcentagem
+    onComplete
 }) => {
     const [isRevealed, setIsRevealed] = useState(false);
     const [revealPercentage, setRevealPercentage] = useState(0);
@@ -81,9 +82,12 @@ const ScratchCard = ({
 
         // Se revelou o suficiente, mostra completamente
         if (percentage >= revealThreshold && !isRevealed) {
-            setIsRevealed(true);
-            // Remove completamente a cobertura
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            setIsRevealed(true)
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+            if (onComplete) {
+                onComplete()
+            }
         }
     };
 
