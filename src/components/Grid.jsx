@@ -41,15 +41,12 @@ export default function Grid() {
     }, [id])
 
     useEffect(() => {
-        const el = gridScrollRef.current
-        if (!el) return
-
         const onScroll = () => {
-            setShowScrollTop(el.scrollTop > 300)
+            setShowScrollTop(window.scrollY > 300)
         }
 
-        el.addEventListener('scroll', onScroll)
-        return () => el.removeEventListener('scroll', onScroll)
+        window.addEventListener('scroll', onScroll)
+        return () => window.removeEventListener('scroll', onScroll)
     }, [])
 
 
@@ -321,7 +318,7 @@ export default function Grid() {
                 <button
                     className="scroll-top-btn"
                     onClick={() =>
-                        gridScrollRef.current?.scrollTo({
+                        window.scrollTo({
                             top: 0,
                             behavior: 'smooth'
                         })
