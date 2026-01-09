@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import Layout from '../Layout/Layout'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import {
     XP_BY_RARITY,
     applyXpProgress
 } from '../utils/gamification'
+import Fab from '@mui/material/Fab'
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import ProgressPanel from '../components/ProgressPanel'
 import InfoPanel from '../components/InfoPanel'
 import ActionsPanel from '../components/ActionsPanel'
@@ -15,13 +17,11 @@ import LevelUpModal from '../components/LevelUpModal'
 import Cell from './Cell'
 import PixModal from './PixModal'
 import ScratchCard from '../components/ScratchCard'
-import pork from '../assets/pork.png'
 import './grid.scss'
 import '../styles/gamification.scss'
 
 export default function Grid() {
     const { id } = useParams()
-    const navigate = useNavigate()
     const { user, updateUser } = useAuth()
     const [focus] = useState(false)
 
@@ -315,17 +315,31 @@ export default function Grid() {
          Scroll Button Top
       ================================ */}
             {showScrollTop && (
-                <button
-                    className="scroll-top-btn"
+                <Fab
+                    color="primary"
+                    size="medium"
                     onClick={() =>
-                        window.scrollTo({
+                        gridScrollRef.current?.scrollTo({
                             top: 0,
                             behavior: 'smooth'
                         })
                     }
+                    sx={{
+                        position: 'fixed',
+                        bottom: 20,
+                        right: 20,
+                        zIndex: 1200,
+                        color: '#fff',
+                        backgroundColor: '#0f172a',
+                        '&:hover': {
+                            backgroundColor: '#020617'
+                        },
+                        boxShadow: '0 8px 24px rgba(0,0,0,0.25)',
+                        animation: 'fabFadeIn 0.25s ease'
+                    }}
                 >
-                    ↑
-                </button>
+                    <KeyboardArrowUpIcon />
+                </Fab>
             )}
         </Layout>
     )
