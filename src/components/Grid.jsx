@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import Layout from '../Layout/Layout'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Box } from '@mui/material'
 import { useAuth } from '../context/AuthContext'
 import {
     XP_BY_RARITY,
@@ -33,6 +33,10 @@ export default function Grid() {
     const [levelUp, setLevelUp] = useState(null)
 
     const [selectedCell, setSelectedCell] = useState(null)
+
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [id])
 
     if (!challenge) {
         return <p>Cofre não encontrado.</p>
@@ -127,196 +131,173 @@ export default function Grid() {
 
 
     return (
-        <div className={`grid-page ${focus ? 'focus-mode' : ''}`}>
-            <div className="grid-layout">
+        <Layout>
+            <div className={`grid-page ${focus ? 'focus-mode' : ''}`}>
+                <div className="grid-layout">
 
-                {/* ===============================
-           HEADER
-        ================================ */}
-                <div className="grid-header">
-                    <button
-                        className="back-inline"
-                        onClick={() => navigate('/dashboard')}
-                    >
-                        ← Voltar
-                    </button>
 
-                    <Box
-                        component="img"
-                        src={pork}
-                        alt="Porquinho"
-                        sx={{ height: 56 }}
-                    />
-                    {/* <div className="grid-header-icon">🐷</div> */}
 
-                    <div className="grid-header-text">
-                        <h1>{challenge.title}</h1>
-                        {challenge.subtitle && (
-                            <p className="subtitle">{challenge.subtitle}</p>
-                        )}
-                    </div>
-                </div>
-
-                {/* ===============================
+                    {/* ===============================
            PAINÉIS
         ================================ */}
-                <div className="grid-panels-layout">
+                    <div className="grid-panels-layout">
 
-                    <div className={`panel-progress ${showScratch ? 'scratch-mode' : ''}`}>
+                        <div className={`panel-progress ${showScratch ? 'scratch-mode' : ''}`}>
 
-                        <button
-                            className="scratch-toggle"
-                            onClick={() => {
-                                const unpaidCells = challenge.grid
-                                    .map((cell, index) => ({ ...cell, index }))
-                                    .filter(cell => !cell.paid)
+                            <button
+                                className="scratch-toggle"
+                                onClick={() => {
+                                    const unpaidCells = challenge.grid
+                                        .map((cell, index) => ({ ...cell, index }))
+                                        .filter(cell => !cell.paid)
 
-                                if (unpaidCells.length === 0) {
-                                    alert('Não há valores pendentes 🎉')
-                                    return
-                                }
+                                    if (unpaidCells.length === 0) {
+                                        alert('Não há valores pendentes 🎉')
+                                        return
+                                    }
 
-                                const randomIndex = Math.floor(Math.random() * unpaidCells.length)
-                                const selected = unpaidCells[randomIndex]
+                                    const randomIndex = Math.floor(Math.random() * unpaidCells.length)
+                                    const selected = unpaidCells[randomIndex]
 
-                                setScratchCell(selected)
-                                setShowScratch(true)
-                            }}
-                        >
-                            🎁
-                        </button>
-
-                        {showScratch && scratchCell ? (
-                            <ScratchCard
-                                hiddenContent={
-                                    `💸 O valor a ser pago hoje é R$ ${scratchCell.value.toFixed(2)}`
-                                }
-                                revealThreshold={65}
-                                onComplete={() => {
-                                    // abre PixModal automaticamente
-                                    setSelectedCell({
-                                        ...scratchCell,
-                                        xpPosition: { x: window.innerWidth / 2, y: 120 }
-                                    })
-
-                                    // fecha Scratch
-                                    setShowScratch(false)
-                                    setScratchCell(null)
+                                    setScratchCell(selected)
+                                    setShowScratch(true)
                                 }}
-                            />
-                        ) : (
-                            <ProgressPanel challenge={challenge} />
-                        )}
+                            >
+                                🎁
+                            </button>
+
+                            {showScratch && scratchCell ? (
+                                <ScratchCard
+                                    hiddenContent={
+                                        `💸 O valor a ser pago hoje é R$ ${scratchCell.value.toFixed(2)}`
+                                    }
+                                    revealThreshold={65}
+                                    onComplete={() => {
+                                        // abre PixModal automaticamente
+                                        setSelectedCell({
+                                            ...scratchCell,
+                                            xpPosition: { x: window.innerWidth / 2, y: 120 }
+                                        })
+
+                                        // fecha Scratch
+                                        setShowScratch(false)
+                                        setScratchCell(null)
+                                    }}
+                                />
+                            ) : (
+                                <ProgressPanel challenge={challenge} />
+                            )}
+                        </div>
+
+
+                        <div className="panel-player">
+                            <PlayerPanel />
+                        </div>
+
+                        <div className="panel-actions compact">
+                            <ActionsPanel challenge={challenge} />
+                        </div>
+
+                        <div className="panel-info">
+                            <InfoPanel challenge={challenge} />
+                        </div>
+
                     </div>
 
-
-                    <div className="panel-player">
-                        <PlayerPanel />
-                    </div>
-
-                    <div className="panel-actions compact">
-                        <ActionsPanel challenge={challenge} />
-                    </div>
-
-                    <div className="panel-info">
-                        <InfoPanel challenge={challenge} />
-                    </div>
-
-                </div>
-
-                {/* ===============================
+                    {/* ===============================
            GRID
         ================================ */}
-                <div className="grid-container">
-                    <div className={`grid progress-${progress}`}>
-                        {challenge.grid.map((cell, index) => (
-                            <Cell
-                                key={index}
-                                value={cell.value}
-                                paid={cell.paid}
-                                rarity={
-                                    cell.value >= challenge.max * 0.9
-                                        ? 'legendary'
-                                        : cell.value >= challenge.max * 0.6
-                                            ? 'rare'
-                                            : 'common'
-                                }
-                                onClick={(e) => {
-                                    if (cell.paid) return
+                    <div className="grid-container">
+                        <div className={`grid progress-${progress}`}>
+                            {challenge.grid.map((cell, index) => (
+                                <Cell
+                                    key={index}
+                                    value={cell.value}
+                                    paid={cell.paid}
+                                    rarity={
+                                        cell.value >= challenge.max * 0.9
+                                            ? 'legendary'
+                                            : cell.value >= challenge.max * 0.6
+                                                ? 'rare'
+                                                : 'common'
+                                    }
+                                    onClick={(e) => {
+                                        if (cell.paid) return
 
-                                    const rect = e.currentTarget.getBoundingClientRect()
+                                        const rect = e.currentTarget.getBoundingClientRect()
 
-                                    setSelectedCell({
-                                        ...cell,
-                                        index,
-                                        xpPosition: {
-                                            x: rect.left + rect.width / 2,
-                                            y: rect.top
-                                        }
-                                    })
-                                }}
-                            />
-                        ))}
+                                        setSelectedCell({
+                                            ...cell,
+                                            index,
+                                            xpPosition: {
+                                                x: rect.left + rect.width / 2,
+                                                y: rect.top
+                                            }
+                                        })
+                                    }}
+                                />
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* ===============================
+   LEGENDA DE RARIDADE
+================================ */}
+                    <div className="grid-container-wrapper">
+                        <div className="grid-legend">
+                            <div className="legend-item common">
+                                <span className="legend-dot" />
+                                <span>Comum</span>
+                            </div>
+
+                            <div className="legend-item rare">
+                                <span className="legend-dot" />
+                                <span>Rara</span>
+                            </div>
+
+                            <div className="legend-item legendary">
+                                <span className="legend-dot" />
+                                <span>Lendária</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 {/* ===============================
-   LEGENDA DE RARIDADE
-================================ */}
-                <div className="grid-container-wrapper">
-                    <div className="grid-legend">
-                        <div className="legend-item common">
-                            <span className="legend-dot" />
-                            <span>Comum</span>
-                        </div>
-
-                        <div className="legend-item rare">
-                            <span className="legend-dot" />
-                            <span>Rara</span>
-                        </div>
-
-                        <div className="legend-item legendary">
-                            <span className="legend-dot" />
-                            <span>Lendária</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* ===============================
             XP FLOAT
       ================================ */}
-            {xpFloat && (
-                <XpFloat
-                    value={xpFloat.value}
-                    x={xpFloat.x}
-                    y={xpFloat.y}
-                />
-            )}
+                {xpFloat && (
+                    <XpFloat
+                        value={xpFloat.value}
+                        x={xpFloat.x}
+                        y={xpFloat.y}
+                    />
+                )}
 
-            {/* ===============================
+                {/* ===============================
          LEVEL UP MODAL
       ================================ */}
 
-            {levelUp && (
-                <LevelUpModal
-                    level={levelUp}
-                    onClose={() => setLevelUp(null)}
-                />
-            )}
+                {levelUp && (
+                    <LevelUpModal
+                        level={levelUp}
+                        onClose={() => setLevelUp(null)}
+                    />
+                )}
 
 
 
-            {/* ===============================
+                {/* ===============================
          MODAL PIX
       ================================ */}
-            {selectedCell && (
-                <PixModal
-                    value={selectedCell.value}
-                    onClose={() => setSelectedCell(null)}
-                    onConfirm={confirmPayment}
-                />
-            )}
-        </div>
+                {selectedCell && (
+                    <PixModal
+                        value={selectedCell.value}
+                        onClose={() => setSelectedCell(null)}
+                        onConfirm={confirmPayment}
+                    />
+                )}
+            </div>
+        </Layout>
     )
 }

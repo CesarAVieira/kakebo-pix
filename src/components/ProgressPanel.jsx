@@ -10,7 +10,13 @@ export default function ProgressPanel({ challenge }) {
 
     return (
         <div className="grid-info-panel progress-panel">
-            <h3>Progresso do Cofre</h3>
+            <div className="challenge-header">
+                <h2>{challenge.title}</h2>
+
+                {challenge.subtitle && (
+                    <p className="subtitle">{challenge.subtitle}</p>
+                )}
+            </div>
 
             <div className="progress-circle">
                 <svg viewBox="0 0 36 36">
