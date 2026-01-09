@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Layout from '../Layout/Layout'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
@@ -33,10 +33,25 @@ export default function Grid() {
     const [levelUp, setLevelUp] = useState(null)
 
     const [selectedCell, setSelectedCell] = useState(null)
+    const gridScrollRef = useRef(null)
+    const [showScrollTop, setShowScrollTop] = useState(false)
 
     useEffect(() => {
         window.scrollTo(0, 0)
     }, [id])
+
+    useEffect(() => {
+        const el = gridScrollRef.current
+        if (!el) return
+
+        const onScroll = () => {
+            setShowScrollTop(el.scrollTop > 300)
+        }
+
+        el.addEventListener('scroll', onScroll)
+        return () => el.removeEventListener('scroll', onScroll)
+    }, [])
+
 
     if (!challenge) {
         return <p>Cofre não encontrado.</p>
@@ -207,7 +222,7 @@ export default function Grid() {
                     {/* ===============================
            GRID
         ================================ */}
-                    <div className="grid-container">
+                    <div className="grid-container" ref={gridScrollRef}>
                         <div className={`grid progress-${progress}`}>
                             {challenge.grid.map((cell, index) => (
                                 <Cell
@@ -298,6 +313,23 @@ export default function Grid() {
                     />
                 )}
             </div>
+
+            {/* ===============================
+         Scroll Button Top
+      ================================ */}
+            {showScrollTop && (
+                <button
+                    className="scroll-top-btn"
+                    onClick={() =>
+                        gridScrollRef.current?.scrollTo({
+                            top: 0,
+                            behavior: 'smooth'
+                        })
+                    }
+                >
+                    ↑
+                </button>
+            )}
         </Layout>
     )
 }
