@@ -319,7 +319,7 @@ export default function Grid() {
                     color="primary"
                     size="medium"
                     onClick={() =>
-                        gridScrollRef.current?.scrollTo({
+                        window.scrollTo({
                             top: 0,
                             behavior: 'smooth'
                         })
@@ -330,10 +330,11 @@ export default function Grid() {
                         right: 20,
                         zIndex: 1200,
                         color: '#fff',
-                        backgroundColor: '#0f172a',
+                        backgroundColor: 'rgba(15, 23, 42, 0.75)',
                         '&:hover': {
-                            backgroundColor: '#020617'
+                            backgroundColor: 'rgba(15, 23, 42, 0.9)'
                         },
+                        backdropFilter: 'blur(6px)',
                         boxShadow: '0 8px 24px rgba(0,0,0,0.25)',
                         animation: 'fabFadeIn 0.25s ease'
                     }}
