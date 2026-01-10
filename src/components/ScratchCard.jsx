@@ -16,6 +16,14 @@ const ScratchCard = ({
     const lastPoint = useRef(null);
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
+    const [canvasSize] = useState(() => {
+        const isDesktop = window.innerWidth >= 1024
+
+        return isDesktop
+            ? { width: 480, height: 300 }
+            : { width: 300, height: 200 }
+    })
+
     // Inicializa o canvas
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -91,8 +99,11 @@ const ScratchCard = ({
     const handleMouseDown = (e) => {
         setIsScratching(true);
         const rect = canvasRef.current.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        const scaleX = canvasRef.current.width / rect.width;
+        const scaleY = canvasRef.current.height / rect.height;
+
+        const x = (e.clientX - rect.left) * scaleX;
+        const y = (e.clientY - rect.top) * scaleY;
 
         lastPoint.current = { x, y };
         drawScratch(x, y);
@@ -102,8 +113,11 @@ const ScratchCard = ({
         if (!isScratching) return;
 
         const rect = canvasRef.current.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        const scaleX = canvasRef.current.width / rect.width;
+        const scaleY = canvasRef.current.height / rect.height;
+
+        const x = (e.clientX - rect.left) * scaleX;
+        const y = (e.clientY - rect.top) * scaleY;
 
         drawScratch(x, y);
     };
@@ -165,8 +179,8 @@ const ScratchCard = ({
 
                     <canvas
                         ref={canvasRef}
-                        width={300}
-                        height={200}
+                        width={canvasSize.width}
+                        height={canvasSize.height}
                         className={`scratch-canvas ${isRevealed ? 'revealed' : ''}`}
                         onMouseDown={handleMouseDown}
                         onMouseMove={handleMouseMove}
@@ -177,8 +191,9 @@ const ScratchCard = ({
                         onTouchEnd={handleTouchEnd}
                         onTouchCancel={handleTouchEnd}
                         style={{
-                            cursor: isMobile ? 'pointer' : 'crosshair',
-                            touchAction: 'none'
+                            width: '100%',
+                            height: '100%',
+                            cursor: isMobile ? 'pointer' : 'crosshair'
                         }}
                     />
 
