@@ -315,6 +315,7 @@
   background: #ffffff;
   border-radius: 16px;
   padding: 22px;
+  isolation: isolate;
 
   box-shadow: 0 10px 26px rgba(0, 0, 0, 0.08);
 
@@ -336,27 +337,6 @@
       #f5e08a 100%
     );
 
-    ::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-
-      background: linear-gradient(
-        120deg,
-        transparent 30%,
-        rgba(255, 255, 255, 0.35) 45%,
-        rgba(255, 255, 255, 0.6) 50%,
-        rgba(255, 255, 255, 0.35) 55%,
-        transparent 70%
-      );
-
-      transform: translateX(-120%);
-      animation: gold-shine 6s ease-in-out infinite;
-
-      pointer-events: none;
-    }
-
     ::after {
       content: "";
       position: absolute;
@@ -373,6 +353,39 @@
       pointer-events: none;
     }
   }
+}
+
+.panel-progress > * {
+  position: relative;
+  z-index: 1;
+}
+
+.panel-progress.scratch-mode {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25),
+    inset 0 0 24px rgba(255, 255, 255, 0.12), 0 18px 40px rgba(0, 0, 0, 0.25);
+  animation: scratch-panel-enter 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.panel-progress.scratch-mode::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+
+  background: linear-gradient(
+    120deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.25) 45%,
+    rgba(255, 255, 255, 0.45) 50%,
+    rgba(255, 255, 255, 0.25) 55%,
+    transparent 70%
+  );
+
+  transform: translateX(-120%);
+  animation: gold-shine 6s ease-in-out infinite;
+
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* Lado direito (Info + Actions lado a lado) */
@@ -1003,5 +1016,16 @@
   }
   100% {
     transform: translateX(120%);
+  }
+}
+
+@keyframes scratch-panel-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
