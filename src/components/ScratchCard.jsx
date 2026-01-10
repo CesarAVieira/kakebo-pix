@@ -5,7 +5,6 @@ const ScratchCard = ({
     hiddenContent = '🎉 Você Ganhou!',
     coverColor = '#888888',
     scratchRadius = 30,
-    revealThreshold = 70, // porcentagem
     onComplete
 }) => {
     const [isRevealed, setIsRevealed] = useState(false);
@@ -80,14 +79,11 @@ const ScratchCard = ({
 
         setRevealPercentage(percentage);
 
-        // Se revelou o suficiente, mostra completamente
-        if (percentage >= revealThreshold && !isRevealed) {
+        if (percentage >= 100 && !isRevealed) {
             setIsRevealed(true)
             ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-            if (onComplete) {
-                onComplete()
-            }
+            if (onComplete) onComplete()
         }
     };
 
@@ -153,24 +149,6 @@ const ScratchCard = ({
         lastPoint.current = null;
     };
 
-    // Reset do componente
-    const handleReset = () => {
-        const canvas = canvasRef.current;
-        const ctx = canvas.getContext('2d');
-
-        // Reseta o canvas
-        ctx.globalCompositeOperation = 'source-over';
-        ctx.fillStyle = coverColor;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.globalCompositeOperation = 'destination-out';
-
-        // Reseta os estados
-        setIsRevealed(false);
-        setRevealPercentage(0);
-        scratchPositions.current = [];
-        lastPoint.current = null;
-    };
-
     return (
         <div className="scratch-card-container" ref={containerRef}>
             <div className="scratch-card">
@@ -211,29 +189,19 @@ const ScratchCard = ({
                 )}
             </div>
 
-            {/* Controles e informações */}
-            <div className="scratch-card-info">
-                <div className="reveal-progress">
-                    <div
-                        className="progress-bar"
-                        style={{ width: `${Math.min(revealPercentage, 100)}%` }}
-                    />
-                    <span>{Math.round(revealPercentage)}% revelado</span>
+            {/* Barra de progresso da raspadinha */}
+            <div className="scratch-wrapper">
+                <div className="scratch-card">
+                    {/* conteúdo e canvas */}
                 </div>
 
-                <button
-                    onClick={handleReset}
-                    className="reset-button"
-                    disabled={revealPercentage === 0}
-                >
-                    Resetar Raspadinha
-                </button>
-
-                {isRevealed && (
-                    <div className="completion-message">
-                        🎊 Conteúdo completamente revelado!
-                    </div>
-                )}
+                <div className="scratch-progress-vertical">
+                    <div
+                        className="progress-fill"
+                        style={{ height: `${Math.min(revealPercentage, 100)}%` }}
+                    />
+                    <span>{Math.round(revealPercentage)}%</span>
+                </div>
             </div>
         </div>
     );
