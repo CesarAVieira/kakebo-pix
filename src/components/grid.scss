@@ -325,60 +325,7 @@
   }
 
   &.scratch-mode {
-    background: linear-gradient(135deg, #68b964, #216827);
-
-    ::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      pointer-events: none;
-
-      background-image: radial-gradient(
-          circle at 20% 80%,
-          rgba(255, 215, 0, 0.35) 0 6px,
-          transparent 7px
-        ),
-        radial-gradient(
-          circle at 60% 90%,
-          rgba(255, 215, 0, 0.25) 0 5px,
-          transparent 6px
-        ),
-        radial-gradient(
-          circle at 80% 70%,
-          rgba(255, 215, 0, 0.3) 0 4px,
-          transparent 5px
-        );
-
-      background-repeat: repeat;
-      background-size: 120px 120px;
-
-      animation: coins-float 14s linear infinite;
-    }
-
-    ::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      pointer-events: none;
-
-      background-image: radial-gradient(
-          circle at 30% 85%,
-          rgba(255, 215, 0, 0.15) 0 8px,
-          transparent 9px
-        ),
-        radial-gradient(
-          circle at 70% 95%,
-          rgba(255, 215, 0, 0.2) 0 6px,
-          transparent 7px
-        );
-
-      background-size: 180px 180px;
-      background-repeat: repeat;
-
-      animation: coins-float 22s linear infinite;
-    }
+    background: linear-gradient(135deg, #1f2933, #111827);
   }
 }
 
