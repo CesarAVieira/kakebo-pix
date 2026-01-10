@@ -1,6 +1,7 @@
 .scratch-card-container {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   gap: 20px;
   padding: 20px;
@@ -15,6 +16,12 @@
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   background: white;
+}
+
+.scratch-card-wrapper {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
 }
 
 .hidden-content {
@@ -71,16 +78,6 @@
   z-index: 10;
 }
 
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 0.8;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
 .scratch-wrapper {
   display: flex;
   align-items: stretch;
@@ -88,9 +85,9 @@
 }
 
 .scratch-progress-vertical {
-  width: 18px;
+  width: 14px;
   border-radius: 10px;
-  background: #e5e7eb;
+  background: rgba(255, 255, 255, 0.25);
   position: relative;
   overflow: hidden;
 
@@ -103,13 +100,23 @@
     top: 4px;
     font-size: 10px;
     font-weight: 600;
-    color: #111;
+    color: #fff;
   }
 
   .progress-fill {
     width: 100%;
     background: linear-gradient(180deg, #22c55e, #16a34a);
     transition: height 0.2s ease;
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
   }
 }
 

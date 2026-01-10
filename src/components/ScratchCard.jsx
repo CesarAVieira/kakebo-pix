@@ -79,7 +79,7 @@ const ScratchCard = ({
 
         setRevealPercentage(percentage);
 
-        if (percentage >= 100 && !isRevealed) {
+        if (percentage >= 70 && !isRevealed) {
             setIsRevealed(true)
             ctx.clearRect(0, 0, canvas.width, canvas.height)
 
@@ -151,60 +151,67 @@ const ScratchCard = ({
 
     return (
         <div className="scratch-card-container" ref={containerRef}>
-            <div className="scratch-card">
-                {/* Conteúdo oculto (fundo) */}
-                <div className="hidden-content">
-                    {typeof hiddenContent === 'string' ? (
-                        <div className="hidden-text">{hiddenContent}</div>
-                    ) : (
-                        hiddenContent
+            <div className="scratch-card-wrapper">
+
+                {/* CARD */}
+                <div className="scratch-card">
+                    <div className="hidden-content">
+                        {typeof hiddenContent === 'string' ? (
+                            <div className="hidden-text">{hiddenContent}</div>
+                        ) : (
+                            hiddenContent
+                        )}
+                    </div>
+
+                    <canvas
+                        ref={canvasRef}
+                        width={300}
+                        height={200}
+                        className={`scratch-canvas ${isRevealed ? 'revealed' : ''}`}
+                        onMouseDown={handleMouseDown}
+                        onMouseMove={handleMouseMove}
+                        onMouseUp={handleMouseUp}
+                        onMouseLeave={handleMouseLeave}
+                        onTouchStart={handleTouchStart}
+                        onTouchMove={handleTouchMove}
+                        onTouchEnd={handleTouchEnd}
+                        onTouchCancel={handleTouchEnd}
+                        style={{
+                            cursor: isMobile ? 'pointer' : 'crosshair',
+                            touchAction: 'none'
+                        }}
+                    />
+
+                    {revealPercentage === 0 && (
+                        <div className="instruction-overlay">
+                            {isMobile ? 'Esfregue com o dedo' : 'Arraste o mouse'}
+                        </div>
                     )}
                 </div>
 
-                {/* Camada de raspadinha (canvas) */}
-                <canvas
-                    ref={canvasRef}
-                    width={300}
-                    height={200}
-                    className={`scratch-canvas ${isRevealed ? 'revealed' : ''}`}
-                    onMouseDown={handleMouseDown}
-                    onMouseMove={handleMouseMove}
-                    onMouseUp={handleMouseUp}
-                    onMouseLeave={handleMouseLeave}
-                    onTouchStart={handleTouchStart}
-                    onTouchMove={handleTouchMove}
-                    onTouchEnd={handleTouchEnd}
-                    onTouchCancel={handleTouchEnd}
-                    style={{
-                        cursor: isMobile ? 'pointer' : 'crosshair',
-                        touchAction: 'none' // Importante para mobile
-                    }}
-                />
-
-                {/* Overlay de instruções */}
-                {revealPercentage === 0 && (
-                    <div className="instruction-overlay">
-                        {isMobile ? 'Esfregue com o dedo' : 'Arraste o mouse'}
-                    </div>
-                )}
-            </div>
-
-            {/* Barra de progresso da raspadinha */}
-            <div className="scratch-wrapper">
-                <div className="scratch-card">
-                    {/* conteúdo e canvas */}
-                </div>
-
+                {/* BARRA VERTICAL */}
                 <div className="scratch-progress-vertical">
                     <div
                         className="progress-fill"
-                        style={{ height: `${Math.min(revealPercentage, 100)}%` }}
+                        style={{
+                            height: `${Math.min(
+                                (revealPercentage / 70) * 100,
+                                100
+                            )}%`
+                        }}
                     />
-                    <span>{Math.round(revealPercentage)}%</span>
+                    <span>
+                        {Math.min(
+                            Math.round((revealPercentage / 70) * 100),
+                            100
+                        )}%
+                    </span>
                 </div>
+
             </div>
         </div>
     );
+
 };
 
 export default ScratchCard;
