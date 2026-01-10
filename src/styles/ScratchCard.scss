@@ -97,10 +97,14 @@
 
   span {
     position: absolute;
-    top: 4px;
     font-size: 10px;
-    font-weight: 600;
+    font-weight: 700;
     color: #fff;
+
+    transform: rotate(-90deg);
+    transform-origin: center;
+    white-space: nowrap;
+    pointer-events: none;
   }
 
   .progress-fill {

@@ -352,6 +352,22 @@
   animation: panelAppear 260ms ease-out both;
 }
 
+.panel-progress.scratch-mode {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .scratch-card-container {
+    width: 100%;
+  }
+
+  .scratch-card-wrapper {
+    width: 100%;
+    max-width: 520px; // controla o tamanho no desktop
+    transform: scale(1.05);
+  }
+}
+
 .scratch-toggle {
   position: absolute;
   top: 12px;
@@ -567,6 +583,15 @@
       "player"
       "actions"
       "info";
+  }
+}
+
+@media (max-width: 768px) {
+  .panel-progress.scratch-mode {
+    .scratch-card-wrapper {
+      max-width: 100%;
+      transform: none;
+    }
   }
 }
 
