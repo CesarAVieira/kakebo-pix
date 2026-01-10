@@ -205,7 +205,7 @@ const ScratchCard = ({
                 </div>
 
                 {/* BARRA VERTICAL */}
-                <div className={`scratch-progress-vertical ${revealPercentage >= 100 ? 'is-complete' : ''}`}>
+                <div className="scratch-progress-vertical">
                     <div
                         className="progress-fill"
                         style={{
