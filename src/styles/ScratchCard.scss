@@ -120,6 +120,8 @@
     font-size: 10px;
     font-weight: 700;
     color: #fff;
+    opacity: 0.85;
+    transition: opacity 0.2s ease;
 
     transform: rotate(-90deg);
     transform-origin: center;
@@ -127,6 +129,10 @@
     pointer-events: none;
     user-select: none;
   }
+}
+
+.scratch-progress-vertical.is-complete span {
+  opacity: 0;
 }
 
 @keyframes pulse {
