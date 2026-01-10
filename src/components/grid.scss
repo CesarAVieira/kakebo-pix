@@ -357,14 +357,22 @@
   align-items: center;
   justify-content: center;
 
+  padding: 24px;
+
   .scratch-card-container {
     width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .scratch-card-wrapper {
     width: 100%;
-    max-width: 520px; // controla o tamanho no desktop
-    transform: scale(1.05);
+    max-width: 720px;
+    display: flex;
+    justify-content: center;
   }
 }
 
@@ -588,9 +596,10 @@
 
 @media (max-width: 768px) {
   .panel-progress.scratch-mode {
+    padding: 12px;
+
     .scratch-card-wrapper {
       max-width: 100%;
-      transform: none;
     }
   }
 }
