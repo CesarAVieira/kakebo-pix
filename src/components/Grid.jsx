@@ -30,6 +30,7 @@ export default function Grid() {
     const [showScratch, setShowScratch] = useState(false)
     const [scratchCell, setScratchCell] = useState(null)
     const [scratchRarity, setScratchRarity] = useState(null)
+    const [isScratchPayment, setIsScratchPayment] = useState(false)
     const [scratchUsedToday, setScratchUsedToday] = useState(false)
     const [xpFloat, setXpFloat] = useState(null)
     const [levelUp, setLevelUp] = useState(null)
@@ -89,7 +90,8 @@ export default function Grid() {
                     : 'common'
 
         // 2️⃣ XP ganho
-        const earnedXp = XP_BY_RARITY[rarity]
+        const baseXp = XP_BY_RARITY[rarity]
+        const earnedXp = isScratchPayment ? baseXp * 2 : baseXp
 
         // 3️⃣ Atualiza gamificação
         const previousLevel = user.gamification.level
@@ -147,6 +149,7 @@ export default function Grid() {
 
         // 7️⃣ Fecha modal
         setSelectedCell(null)
+        setIsScratchPayment(false)
     }
 
 
@@ -168,6 +171,12 @@ export default function Grid() {
                                 ${showScratch ? 'scratch-mode' : ''}
                                 ${scratchRarity ? `rarity-${scratchRarity}` : ''}
                             `}>
+                            {showScratch && (
+                                <div className="double-xp-badge">
+                                    <span className="xp">XP</span>
+                                    <span className="text">EM DOBRO</span>
+                                </div>
+                            )}
                             {!scratchUsedToday && !scratchCell && (
                                 <div className="scratch-tooltip-wrapper">
                                     <button
@@ -218,6 +227,7 @@ export default function Grid() {
                                         setScratchUsedToday(true)
                                         setShowScratch(false)
                                         setScratchRarity(null)
+                                        setIsScratchPayment(true)
 
                                         setSelectedCell({
                                             ...scratchCell,
