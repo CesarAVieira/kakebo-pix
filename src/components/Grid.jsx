@@ -169,34 +169,43 @@ export default function Grid() {
                                 ${scratchRarity ? `rarity-${scratchRarity}` : ''}
                             `}>
                             {!scratchUsedToday && !scratchCell && (
-                                <button
-                                    className="scratch-toggle"
-                                    title="Sortear valor do dia"
-                                    onClick={() => {
-                                        if (scratchUsedToday || scratchCell) return
+                                <div className="scratch-tooltip-wrapper">
+                                    <button
+                                        className="scratch-toggle"
+                                        title="Sortear valor do dia"
+                                        onClick={() => {
+                                            if (scratchUsedToday || scratchCell) return
 
-                                        const unpaidCells = challenge.grid
-                                            .map((cell, index) => ({ ...cell, index }))
-                                            .filter(cell => !cell.paid)
+                                            const unpaidCells = challenge.grid
+                                                .map((cell, index) => ({ ...cell, index }))
+                                                .filter(cell => !cell.paid)
 
-                                        if (unpaidCells.length === 0) {
-                                            alert('Não há valores pendentes 🎉')
-                                            return
-                                        }
+                                            if (unpaidCells.length === 0) {
+                                                alert('Não há valores pendentes 🎉')
+                                                return
+                                            }
 
-                                        const randomIndex = Math.floor(
-                                            Math.random() * unpaidCells.length
-                                        )
+                                            const randomIndex = Math.floor(
+                                                Math.random() * unpaidCells.length
+                                            )
 
-                                        const selected = unpaidCells[randomIndex]
+                                            const selected = unpaidCells[randomIndex]
 
-                                        setScratchCell(selected)
-                                        setScratchRarity(getScratchRarity(selected.value))
-                                        setShowScratch(true)
-                                    }}
-                                >
-                                    🎲
-                                </button>
+                                            setScratchCell(selected)
+                                            setScratchRarity(getScratchRarity(selected.value))
+                                            setShowScratch(true)
+                                        }}
+                                    >
+                                        🎲
+                                    </button>
+
+                                    <div className="scratch-tooltip">
+                                        <strong>🎲 Sorteie o valor de hoje</strong>
+                                        <span>
+                                            Um valor aleatório da sua grid será escolhido para pagamento.
+                                        </span>
+                                    </div>
+                                </div>
                             )}
 
                             {showScratch && scratchCell ? (
