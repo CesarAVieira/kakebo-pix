@@ -52,6 +52,7 @@ export default function Grid() {
        Raspadinha
     ================================ */
 
+    const scratchLockRef = useRef(false)
     const [isScratchPayment, setIsScratchPayment] = useState(false)
     const scratch = challenge?.scratch ?? null
 
@@ -89,6 +90,9 @@ export default function Grid() {
     }
 
     const handleScratchClick = async () => {
+        if (scratchLockRef.current) return
+        scratchLockRef.current = true
+
         if (hasUsedScratchToday()) {
             alert('Você já usou a raspadinha de hoje 🎟️')
             return
@@ -215,6 +219,7 @@ export default function Grid() {
         // 7️⃣ Fecha modal
         setSelectedCell(null)
         setIsScratchPayment(false)
+        scratchLockRef.current = false
     }
 
 
