@@ -31,7 +31,6 @@ export default function Grid() {
     const [scratchCell, setScratchCell] = useState(null)
     const [scratchRarity, setScratchRarity] = useState(null)
     const [scratchUsedToday, setScratchUsedToday] = useState(false)
-    const [isScratchPayment, setIsScratchPayment] = useState(false)
     const [xpFloat, setXpFloat] = useState(null)
     const [levelUp, setLevelUp] = useState(null)
 
@@ -90,8 +89,7 @@ export default function Grid() {
                     : 'common'
 
         // 2️⃣ XP ganho
-        const baseXp = XP_BY_RARITY[rarity]
-        const earnedXp = isScratchPayment ? baseXp * 2 : baseXp
+        const earnedXp = XP_BY_RARITY[rarity]
 
         // 3️⃣ Atualiza gamificação
         const previousLevel = user.gamification.level
@@ -149,7 +147,6 @@ export default function Grid() {
 
         // 7️⃣ Fecha modal
         setSelectedCell(null)
-        setIsScratchPayment(false)
     }
 
 
@@ -164,28 +161,7 @@ export default function Grid() {
            PAINÉIS
         ================================ */}
                     <div className="grid-panels-layout">
-                        {showScratch && (
-                            <div className="xp-double-badge">
-                                <div className="xp-text xp-gold">
-                                    <span className="base">XP</span>
-                                    <span className="shine">XP</span>
 
-                                    {/* sparkles */}
-                                    <i className="sparkle s1" />
-                                    <i className="sparkle s2" />
-                                    <i className="sparkle s3" />
-                                </div>
-
-                                <div className="xp-text xp-silver">
-                                    <span className="base">EM DOBRO</span>
-                                    <span className="shine">EM DOBRO</span>
-
-                                    {/* sparkles */}
-                                    <i className="sparkle s1" />
-                                    <i className="sparkle s2" />
-                                </div>
-                            </div>
-                        )}
                         <div
                             className={`
                                 panel-progress
@@ -226,7 +202,7 @@ export default function Grid() {
                                     <div className="scratch-tooltip">
                                         <strong>🎲 Sorteie o valor de hoje</strong>
                                         <span>
-                                            Utilize nossa raspadinha para revelar o valor de pagamento.
+                                            Um valor aleatório da sua grid será escolhido para pagamento.
                                         </span>
                                     </div>
                                 </div>
@@ -242,7 +218,6 @@ export default function Grid() {
                                         setScratchUsedToday(true)
                                         setShowScratch(false)
                                         setScratchRarity(null)
-                                        setIsScratchPayment(true)
 
                                         setSelectedCell({
                                             ...scratchCell,
