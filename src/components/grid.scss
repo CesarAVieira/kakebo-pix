@@ -467,7 +467,7 @@
 }
 
 .scratch-tooltip {
-  margin-top: 35px;
+  margin-top: 75px;
 
   max-width: 220px;
   padding: 10px 12px;
@@ -499,7 +499,7 @@
 .scratch-tooltip::after {
   content: "";
   position: absolute;
-  bottom: -6px;
+  top: -6px;
   right: 14px;
 
   width: 12px;
