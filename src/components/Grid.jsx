@@ -199,13 +199,11 @@ export default function Grid() {
                                         🎲
                                     </button>
 
-                                    <div className="scratch-tooltip-portal">
-                                        <div className="scratch-tooltip">
-                                            <strong>🎲 Sorteie o valor de hoje</strong>
-                                            <span>
-                                                Um valor aleatório da sua grid será escolhido para pagamento.
-                                            </span>
-                                        </div>
+                                    <div className="scratch-tooltip">
+                                        <strong>🎲 Sorteie o valor de hoje</strong>
+                                        <span>
+                                            Um valor aleatório da sua grid será escolhido para pagamento.
+                                        </span>
                                     </div>
                                 </div>
                             )}
