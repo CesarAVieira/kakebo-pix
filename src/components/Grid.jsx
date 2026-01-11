@@ -29,6 +29,7 @@ export default function Grid() {
     const challenge = challenges.find(c => c.id === id)
     const [showScratch, setShowScratch] = useState(false)
     const [scratchCell, setScratchCell] = useState(null)
+    const [scratchRarity, setScratchRarity] = useState(null)
     const [scratchUsedToday, setScratchUsedToday] = useState(false)
     const [xpFloat, setXpFloat] = useState(null)
     const [levelUp, setLevelUp] = useState(null)
@@ -53,6 +54,12 @@ export default function Grid() {
 
     if (!challenge) {
         return <p>Cofre não encontrado.</p>
+    }
+
+    const getScratchRarity = (value) => {
+        if (value >= challenge.max * 0.9) return 'legendary'
+        if (value >= challenge.max * 0.6) return 'rare'
+        return 'common'
     }
 
     /* ===============================
@@ -155,13 +162,17 @@ export default function Grid() {
         ================================ */}
                     <div className="grid-panels-layout">
 
-                        <div className={`panel-progress ${showScratch ? 'scratch-mode' : ''}`}>
+                        <div
+                            className={`
+                                panel-progress
+                                ${showScratch ? 'scratch-mode' : ''}
+                                ${scratchRarity ? `rarity-${scratchRarity}` : ''}
+                            `}>
                             {!scratchUsedToday && !scratchCell && (
                                 <button
                                     className="scratch-toggle"
                                     title="Sortear valor do dia"
                                     onClick={() => {
-                                        // trava se já existe valor
                                         if (scratchUsedToday || scratchCell) return
 
                                         const unpaidCells = challenge.grid
@@ -179,8 +190,8 @@ export default function Grid() {
 
                                         const selected = unpaidCells[randomIndex]
 
-                                        // trava o valor
                                         setScratchCell(selected)
+                                        setScratchRarity(getScratchRarity(selected.value))
                                         setShowScratch(true)
                                     }}
                                 >
@@ -197,6 +208,7 @@ export default function Grid() {
                                     onComplete={() => {
                                         setScratchUsedToday(true)
                                         setShowScratch(false)
+                                        setScratchRarity(null)
 
                                         setSelectedCell({
                                             ...scratchCell,
