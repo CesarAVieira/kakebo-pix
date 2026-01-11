@@ -457,8 +457,8 @@
 
 .scratch-tooltip-wrapper {
   position: absolute;
-  top: 24px;
-  right: 20px;
+  top: 12px;
+  right: 12px;
   z-index: 5;
 
   display: flex;
@@ -467,7 +467,7 @@
 }
 
 .scratch-tooltip {
-  margin-top: 10px;
+  margin-top: 30px;
 
   max-width: 220px;
   padding: 10px 12px;
