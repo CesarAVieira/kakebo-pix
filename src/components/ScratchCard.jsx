@@ -13,6 +13,7 @@ const ScratchCard = ({
     const canvasRef = useRef(null);
     const containerRef = useRef(null);
     const scratchPositions = useRef([]);
+    const [completed, setCompleted] = useState(false);
     const lastPoint = useRef(null);
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
@@ -89,9 +90,13 @@ const ScratchCard = ({
 
         if (percentage >= 70 && !isRevealed) {
             setIsRevealed(true)
-            ctx.clearRect(0, 0, canvas.width, canvas.height)
+            setCompleted(true)
 
-            if (onComplete) onComplete()
+            setTimeout(() => {
+                if (onComplete) onComplete()
+            }, 500)
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
         }
     };
 
@@ -171,7 +176,9 @@ const ScratchCard = ({
                 <div className="scratch-card">
                     <div className="hidden-content">
                         {typeof hiddenContent === 'string' ? (
-                            <div className="hidden-text">{hiddenContent}</div>
+                            <div className={`hidden-text ${completed ? 'reveal-animate' : ''}`}>
+                                {hiddenContent}
+                            </div>
                         ) : (
                             hiddenContent
                         )}
