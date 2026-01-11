@@ -242,7 +242,7 @@ export default function Grid() {
                                     <span className="text">EM DOBRO</span>
                                 </div>
                             )}
-                            {!hasUsedScratchToday() && !scratchCell && (
+                            {!scratch && (
                                 <div className="scratch-tooltip-wrapper">
                                     <button
                                         className="scratch-toggle"
