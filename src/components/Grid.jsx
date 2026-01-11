@@ -85,8 +85,8 @@ export default function Grid() {
     }
 
     const hasUsedScratchToday = () => {
-        if (!challenge?.scratch?.date) return false
-        return isSameDay(challenge.scratch.date, new Date())
+        if (!challenge?.lastScratchDate) return false
+        return isSameDay(challenge.lastScratchDate, new Date())
     }
 
     const handleScratchClick = async () => {
@@ -117,9 +117,9 @@ export default function Grid() {
                 ...c,
                 scratch: {
                     value: selected.value,
-                    index: selected.index,
-                    date: new Date().toISOString()
-                }
+                    index: selected.index
+                },
+                lastScratchDate: new Date().toISOString()
             }
         })
 
@@ -247,7 +247,7 @@ export default function Grid() {
                                     <span className="text">EM DOBRO</span>
                                 </div>
                             )}
-                            {!scratch && (
+                            {!hasUsedScratchToday() && !scratch && (
                                 <div className="scratch-tooltip-wrapper">
                                     <button
                                         className="scratch-toggle"
