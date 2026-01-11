@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import Layout from '../Layout/Layout'
 import { useParams } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { getRandomIndex } from '../utils/random'
 import {
     XP_BY_RARITY,
     applyXpProgress
@@ -27,11 +28,6 @@ export default function Grid() {
 
     const challenges = user?.challenges || []
     const challenge = challenges.find(c => c.id === id)
-    const [showScratch, setShowScratch] = useState(false)
-    const [scratchCell, setScratchCell] = useState(null)
-    const [scratchRarity, setScratchRarity] = useState(null)
-    const [isScratchPayment, setIsScratchPayment] = useState(false)
-    const [scratchUsedToday, setScratchUsedToday] = useState(false)
     const [xpFloat, setXpFloat] = useState(null)
     const [levelUp, setLevelUp] = useState(null)
 
@@ -52,15 +48,82 @@ export default function Grid() {
         return () => window.removeEventListener('scroll', onScroll)
     }, [])
 
+    /* ===============================
+       Raspadinha
+    ================================ */
 
-    if (!challenge) {
-        return <p>Cofre não encontrado.</p>
-    }
+    const [isScratchPayment, setIsScratchPayment] = useState(false)
+    const scratch = challenge?.scratch ?? null
+
+    const scratchCell = scratch
+        ? { value: scratch.value, index: scratch.index }
+        : null
+
+    const showScratch = Boolean(scratch && !selectedCell)
 
     const getScratchRarity = (value) => {
+        if (!challenge?.max) return 'common'
         if (value >= challenge.max * 0.9) return 'legendary'
         if (value >= challenge.max * 0.6) return 'rare'
         return 'common'
+    }
+
+    const scratchRarity = scratch
+        ? getScratchRarity(scratch.value)
+        : null
+
+    const isSameDay = (dateA, dateB) => {
+        const a = new Date(dateA)
+        const b = new Date(dateB)
+
+        return (
+            a.getFullYear() === b.getFullYear() &&
+            a.getMonth() === b.getMonth() &&
+            a.getDate() === b.getDate()
+        )
+    }
+
+    const hasUsedScratchToday = () => {
+        if (!challenge?.scratch?.date) return false
+        return isSameDay(challenge.scratch.date, new Date())
+    }
+
+    const handleScratchClick = async () => {
+        if (hasUsedScratchToday()) {
+            alert('Você já usou a raspadinha de hoje 🎟️')
+            return
+        }
+
+        const unpaidCells = challenge.grid
+            .map((cell, index) => ({ ...cell, index }))
+            .filter(cell => !cell.paid)
+
+        if (unpaidCells.length === 0) {
+            alert('Não há valores pendentes 🎉')
+            return
+        }
+
+        const randomIndex = getRandomIndex(unpaidCells.length)
+        const selected = unpaidCells[randomIndex]
+
+        const updatedChallenges = challenges.map(c => {
+            if (c.id !== id) return c
+
+            return {
+                ...c,
+                scratch: {
+                    value: selected.value,
+                    index: selected.index,
+                    date: new Date().toISOString()
+                }
+            }
+        })
+
+        await updateUser({ challenges: updatedChallenges })
+    }
+
+    if (!challenge) {
+        return <p>Cofre não encontrado.</p>
     }
 
     /* ===============================
@@ -81,6 +144,7 @@ export default function Grid() {
        PAGAMENTO
     ================================ */
     const confirmPayment = async () => {
+        if (!selectedCell) return
         // 1️⃣ Define raridade
         const rarity =
             selectedCell.value >= challenge.max * 0.9
@@ -111,6 +175,7 @@ export default function Grid() {
 
             return {
                 ...c,
+                scratch: null,
                 grid: c.grid.map((cell, index) =>
                     index === selectedCell.index
                         ? { ...cell, paid: true }
@@ -131,7 +196,7 @@ export default function Grid() {
                     challengeId: id,
                     challengeName: challenge.title,
                     rarity,
-                    xp: earnedXp
+                    xp: earnedXp,
                 }
             ]
         })
@@ -177,33 +242,11 @@ export default function Grid() {
                                     <span className="text">EM DOBRO</span>
                                 </div>
                             )}
-                            {!scratchUsedToday && !scratchCell && (
+                            {!hasUsedScratchToday() && !scratchCell && (
                                 <div className="scratch-tooltip-wrapper">
                                     <button
                                         className="scratch-toggle"
-                                        title="Sortear valor do dia"
-                                        onClick={() => {
-                                            if (scratchUsedToday || scratchCell) return
-
-                                            const unpaidCells = challenge.grid
-                                                .map((cell, index) => ({ ...cell, index }))
-                                                .filter(cell => !cell.paid)
-
-                                            if (unpaidCells.length === 0) {
-                                                alert('Não há valores pendentes 🎉')
-                                                return
-                                            }
-
-                                            const randomIndex = Math.floor(
-                                                Math.random() * unpaidCells.length
-                                            )
-
-                                            const selected = unpaidCells[randomIndex]
-
-                                            setScratchCell(selected)
-                                            setScratchRarity(getScratchRarity(selected.value))
-                                            setShowScratch(true)
-                                        }}
+                                        onClick={handleScratchClick}
                                     >
                                         🎲
                                     </button>
@@ -211,7 +254,7 @@ export default function Grid() {
                                     <div className="scratch-tooltip">
                                         <strong>🎲 Sorteie o valor de hoje</strong>
                                         <span>
-                                            Um valor aleatório da sua grid será escolhido para pagamento.
+                                            Utilize nossa raspadinha para revelar o valor de pagamento.
                                         </span>
                                     </div>
                                 </div>
@@ -224,9 +267,6 @@ export default function Grid() {
                                     }
                                     revealThreshold={65}
                                     onComplete={() => {
-                                        setScratchUsedToday(true)
-                                        setShowScratch(false)
-                                        setScratchRarity(null)
                                         setIsScratchPayment(true)
 
                                         setSelectedCell({
