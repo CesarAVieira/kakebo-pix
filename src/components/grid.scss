@@ -463,11 +463,13 @@
 
 .scratch-tooltip {
   position: absolute;
-  top: -10px;
-  right: 52px;
+  bottom: calc(100% + 12px);
+  right: 0;
 
-  max-width: 220px;
-  padding: 12px 14px;
+  transform-origin: bottom right;
+
+  max-width: 200px;
+  padding: 10px 12px;
 
   background: rgba(15, 23, 42, 0.95);
   color: #fff;
@@ -475,7 +477,7 @@
   border-radius: 12px;
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
 
-  font-size: 13px;
+  font-size: 12.5px;
   line-height: 1.35;
 
   display: flex;
@@ -491,7 +493,7 @@
 }
 
 .scratch-tooltip strong {
-  font-weight: 600;
+  font-size: 13px;
 }
 
 .scratch-tooltip span {
@@ -501,8 +503,8 @@
 .scratch-tooltip::after {
   content: "";
   position: absolute;
-  top: 14px;
-  right: -6px;
+  bottom: -6px;
+  right: 14px;
 
   width: 12px;
   height: 12px;
@@ -1182,7 +1184,7 @@
 @keyframes scratch-tooltip-enter {
   from {
     opacity: 0;
-    transform: translateY(6px) scale(0.98);
+    transform: translateY(6px) scale(0.96);
   }
   to {
     opacity: 1;
