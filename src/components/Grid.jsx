@@ -119,7 +119,6 @@ export default function Grid() {
                     value: selected.value,
                     index: selected.index
                 },
-                lastScratchDate: new Date().toISOString()
             }
         })
 
@@ -180,6 +179,7 @@ export default function Grid() {
             return {
                 ...c,
                 scratch: null,
+                lastScratchDate: new Date().toISOString(),
                 grid: c.grid.map((cell, index) =>
                     index === selectedCell.index
                         ? { ...cell, paid: true }
@@ -222,6 +222,25 @@ export default function Grid() {
         scratchLockRef.current = false
     }
 
+    const cancelScratch = async () => {
+        // Fecha PixModal
+        setSelectedCell(null)
+
+        // Libera lock local
+        scratchLockRef.current = false
+
+        // Remove o scratch ativo (mas NÃO a data)
+        const updatedChallenges = challenges.map(c => {
+            if (c.id !== id) return c
+
+            return {
+                ...c,
+                scratch: null
+            }
+        })
+
+        await updateUser({ challenges: updatedChallenges })
+    }
 
     return (
         <Layout>
@@ -392,7 +411,7 @@ export default function Grid() {
                 {selectedCell && (
                     <PixModal
                         value={selectedCell.value}
-                        onClose={() => setSelectedCell(null)}
+                        onClose={cancelScratch}
                         onConfirm={confirmPayment}
                     />
                 )}
