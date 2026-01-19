@@ -5,8 +5,10 @@ const ScratchCard = ({
     hiddenContent = '🎉 Você Ganhou!',
     coverColor = '#888888',
     scratchRadius = 30,
-    onComplete
+    onComplete,
+    onClose
 }) => {
+    const initializedRef = useRef(false);
     const [isRevealed, setIsRevealed] = useState(false);
     const [revealPercentage, setRevealPercentage] = useState(0);
     const [isScratching, setIsScratching] = useState(false);
@@ -27,15 +29,26 @@ const ScratchCard = ({
 
     // Inicializa o canvas
     useEffect(() => {
-        const canvas = canvasRef.current;
-        const ctx = canvas.getContext('2d');
+        if (initializedRef.current) return;
+        initializedRef.current = true;
 
-        // Preenche com a cor de cobertura
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+        // Reset explícito (muito importante)
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Camada de cobertura
         ctx.fillStyle = coverColor;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Modo raspagem
         ctx.globalCompositeOperation = 'destination-out';
 
-        // Configura qualidade do traço
+        // Qualidade do traço
         ctx.lineWidth = scratchRadius * 2;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
@@ -171,6 +184,15 @@ const ScratchCard = ({
     return (
         <div className="scratch-card-container" ref={containerRef}>
             <div className="scratch-card-wrapper">
+                {onClose && (
+                    <button
+                        className="scratch-close"
+                        onClick={onClose}
+                        aria-label="Fechar raspadinha"
+                    >
+                        ✕
+                    </button>
+                )}
 
                 {/* CARD */}
                 <div className="scratch-card">

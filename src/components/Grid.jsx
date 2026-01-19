@@ -301,6 +301,7 @@ export default function Grid() {
                                             }
                                         })
                                     }}
+                                    onClose={cancelScratch}
                                 />
                             ) : (
                                 <ProgressPanel challenge={challenge} />

@@ -5,7 +5,8 @@
   align-items: center;
   gap: 20px;
   padding: 20px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 .scratch-card {
@@ -132,6 +133,49 @@
 
     pointer-events: none;
     user-select: none;
+  }
+}
+
+.scratch-card-wrapper {
+  position: relative;
+}
+
+.scratch-close {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+
+  border: none;
+  cursor: pointer;
+
+  background: rgba(15, 23, 42, 0.85);
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 600;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 20;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease;
+
+  &:hover {
+    background: rgba(15, 23, 42, 1);
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
   }
 }
 
