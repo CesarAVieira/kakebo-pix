@@ -54,13 +54,19 @@ export default function Grid() {
 
     const scratchLockRef = useRef(false)
     const [isScratchPayment, setIsScratchPayment] = useState(false)
+    const [isClosingScratch, setIsClosingScratch] = useState(false)
     const scratch = challenge?.scratch ?? null
 
     const scratchCell = scratch
         ? { value: scratch.value, index: scratch.index }
         : null
 
-    const showScratch = Boolean(scratch && !selectedCell)
+    // const showScratch = Boolean(scratch && !selectedCell)
+    const showScratch = Boolean(
+        scratch &&
+        !selectedCell &&
+        !isClosingScratch
+    )
 
     const getScratchRarity = (value) => {
         if (!challenge?.max) return 'common'
@@ -223,23 +229,24 @@ export default function Grid() {
     }
 
     const cancelScratch = async () => {
-        // Fecha PixModal
+        setIsClosingScratch(true)
         setSelectedCell(null)
-
-        // Libera lock local
         scratchLockRef.current = false
 
-        // Remove o scratch ativo (mas NÃO a data)
-        const updatedChallenges = challenges.map(c => {
-            if (c.id !== id) return c
+        setTimeout(async () => {
+            const updatedChallenges = challenges.map(c => {
+                if (c.id !== id) return c
 
-            return {
-                ...c,
-                scratch: null
-            }
-        })
+                return {
+                    ...c,
+                    scratch: null
+                }
+            })
 
-        await updateUser({ challenges: updatedChallenges })
+            await updateUser({ challenges: updatedChallenges })
+
+            setIsClosingScratch(false)
+        }, 120)
     }
 
     return (
@@ -265,6 +272,15 @@ export default function Grid() {
                                     <span className="xp">XP</span>
                                     <span className="text">EM DOBRO</span>
                                 </div>
+                            )}
+                            {showScratch && (
+                                <button
+                                    className="scratch-close-panel"
+                                    onClick={cancelScratch}
+                                    aria-label="Fechar raspadinha"
+                                >
+                                    ✕
+                                </button>
                             )}
                             {!hasUsedScratchToday() && !scratch && (
                                 <div className="scratch-tooltip-wrapper">
@@ -301,7 +317,6 @@ export default function Grid() {
                                             }
                                         })
                                     }}
-                                    onClose={cancelScratch}
                                 />
                             ) : (
                                 <ProgressPanel challenge={challenge} />
