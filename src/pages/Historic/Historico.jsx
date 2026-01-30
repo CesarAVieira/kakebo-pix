@@ -5,14 +5,18 @@ import '../../styles/Historico.scss'
 import { useMemo, useState } from 'react'
 import dayjs from 'dayjs'
 
-import CalendarHistory from './components/CalendarHistory.jsx'
+import YearCalendar from './components/YearCalendar'
+import MobileCalendar from './components/MobileCalendar'
 import DaySummaryModal from './components/DaySummaryModal'
 import MonthSummaryCard from './components/MonthSummaryCard'
+import { useTheme, useMediaQuery } from '@mui/material'
 
 import { Typography } from '@mui/material'
 
 export default function Historico() {
     const { user } = useAuth()
+    const theme = useTheme()
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'))
     const history = user?.historico || []
 
     const [selectedDay, setSelectedDay] = useState(null)
@@ -53,10 +57,17 @@ export default function Historico() {
                 <MonthSummaryCard history={history} />
 
                 {/* CALENDÁRIO */}
-                <CalendarHistory
-                    historyByDay={historyByDay}
-                    onSelectDay={setSelectedDay}
-                />
+                {isMobile ? (
+                    <MobileCalendar
+                        historyByDay={historyByDay}
+                        onSelectDay={setSelectedDay}
+                    />
+                ) : (
+                    <YearCalendar
+                        historyByDay={historyByDay}
+                        onSelectDay={setSelectedDay}
+                    />
+                )}
 
                 {/* MODAL */}
                 <DaySummaryModal
