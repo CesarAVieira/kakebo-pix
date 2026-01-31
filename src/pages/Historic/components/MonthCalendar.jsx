@@ -56,7 +56,7 @@ export default function MonthCalendar({
           disableHighlightToday
           showDaysOutsideCurrentMonth={false}
           sx={{
-            maxHeight: 300,
+            maxHeight: 260,
             '& .MuiDayCalendar-weekContainer': {
               marginBottom: '2px',
             }

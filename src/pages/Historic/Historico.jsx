@@ -45,13 +45,6 @@ export default function Historico() {
     return (
         <Layout>
             <div className="historico-page">
-                {/* <Typography variant="h4" className="page-title">
-                    Histórico
-                </Typography> */}
-
-                <Typography className="page-subtitle">
-                    .
-                </Typography>
 
                 {/* RESUMO DO MÊS */}
                 <MonthSummaryCard history={history} />

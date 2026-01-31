@@ -16,25 +16,30 @@ export default function MonthSummaryCard({ history }) {
 
     return (
         <Box className="month-summary premium-card">
-            <Typography variant="h6">
-                Resumo do mês
-            </Typography>
+            <Box className="month-summary-grid">
+                <Box className="summary-item total">
+                    <span className="summary-icon">💰</span>
+                    <strong className="summary-value">
+                        R$ {total.toFixed(2)}
+                    </strong>
+                    <span className="summary-label">Total</span>
+                </Box>
 
-            <Box className="month-grid">
-                <div>
-                    <strong>💰 R$ {total.toFixed(2)}</strong>
-                    <span>Total</span>
-                </div>
+                <Box className="summary-item days">
+                    <span className="summary-icon">📅</span>
+                    <strong className="summary-value">
+                        {days}
+                    </strong>
+                    <span className="summary-label">Dias ativos</span>
+                </Box>
 
-                <div>
-                    <strong>📅 {days}</strong>
-                    <span>Dias ativos</span>
-                </div>
-
-                <div>
-                    <strong>⭐ {xp}</strong>
-                    <span>XP</span>
-                </div>
+                <Box className="summary-item xp">
+                    <span className="summary-icon">⭐</span>
+                    <strong className="summary-value">
+                        {xp}
+                    </strong>
+                    <span className="summary-label">XP</span>
+                </Box>
             </Box>
         </Box>
     )
