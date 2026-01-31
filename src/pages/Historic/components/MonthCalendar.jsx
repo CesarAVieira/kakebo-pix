@@ -55,6 +55,13 @@ export default function MonthCalendar({
           views={['day']}
           disableHighlightToday
           showDaysOutsideCurrentMonth={false}
+          sx={{
+            maxHeight: 300,
+            '& .MuiDayCalendar-weekContainer': {
+              marginBottom: '2px',
+            }
+          }
+          }
           onChange={d => {
             const key = d.format('YYYY-MM-DD')
             if (historyByDay[key]) {
@@ -71,19 +78,25 @@ export default function MonthCalendar({
                 props.day.isSame(dayjs(), 'day') &&
                 props.day.isSame(month, 'month')
 
+              const borderStyle = isToday
+                ? '1.5px solid #34c966'
+                : rarity
+                  ? '1px solid rgba(0,0,0,0.12)'
+                  : '1px solid transparent'
+
               return (
                 <PickersDay
                   {...props}
+                  selected={false}
+                  disableRipple
                   sx={{
+                    border: borderStyle,
                     borderRadius: 2,
                     bgcolor: rarity
                       ? rarityColors[rarity]
                       : 'transparent',
                     color: rarity ? '#fff' : undefined,
                     fontWeight: rarity ? 600 : 400,
-                    border: isToday
-                      ? '1px solid #3b82f6'
-                      : undefined,
                     transition: '0.2s',
                     '&:hover': {
                       filter: rarity
