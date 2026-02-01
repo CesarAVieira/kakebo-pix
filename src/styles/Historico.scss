@@ -146,6 +146,47 @@
   color: #6b7280;
 }
 
+.cofre-filter {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 6px 12px 6px;
+  margin-bottom: 16px;
+
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.cofre-filter-scroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 6px 4px;
+
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.cofre-chip {
+  white-space: nowrap;
+  padding: 10px 18px;
+  border-radius: 12px;
+  background: #eefbf3;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+
+  &.active {
+    background: #22c55e;
+    color: #fff;
+  }
+}
+
 @media (max-width: 768px) {
   .year-calendar {
     display: none;

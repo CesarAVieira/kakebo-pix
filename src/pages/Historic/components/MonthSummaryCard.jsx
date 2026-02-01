@@ -1,17 +1,28 @@
 import { Box, Typography } from '@mui/material'
 import dayjs from 'dayjs'
 
-export default function MonthSummaryCard({ history }) {
-    const currentMonth = dayjs().format('YYYY-MM')
+export default function MonthSummaryCard({ history, month }) {
+    const startOfMonth = month.startOf('month')
+    const endOfMonth = month.endOf('month')
 
-    const monthItems = history.filter(
-        h => dayjs(h.date).format('YYYY-MM') === currentMonth
+    const monthItems = history.filter(h => {
+        const date = dayjs(h.date || h.data)
+        if (!date.isValid()) return false
+        return date >= startOfMonth && date <= endOfMonth
+    })
+
+    const total = monthItems.reduce(
+        (s, i) => s + (Number(i.value) || Number(i.valor) || 0),
+        0
     )
-
-    const total = monthItems.reduce((s, i) => s + i.value, 0)
-    const xp = monthItems.reduce((s, i) => s + (i.xp || 0), 0)
+    const xp = monthItems.reduce(
+        (s, i) => s + (Number(i.xp) || 0),
+        0
+    )
     const days = new Set(
-        monthItems.map(i => dayjs(i.date).format('DD'))
+        monthItems.map(i =>
+            dayjs(i.date || i.data).format('DD')
+        )
     ).size
 
     return (
@@ -30,7 +41,7 @@ export default function MonthSummaryCard({ history }) {
                     <strong className="summary-value">
                         {days}
                     </strong>
-                    <span className="summary-label">Dias ativos</span>
+                    <span className="summary-label">Dias depósitados</span>
                 </Box>
 
                 <Box className="summary-item xp">

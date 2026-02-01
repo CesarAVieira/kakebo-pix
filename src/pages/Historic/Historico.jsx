@@ -5,6 +5,7 @@ import '../../styles/Historico.scss'
 import { useMemo, useState } from 'react'
 import dayjs from 'dayjs'
 
+import CofreFilter from './components/CofreFilter'
 import YearCalendar from './components/YearCalendar'
 import MobileCalendar from './components/MobileCalendar'
 import DaySummaryModal from './components/DaySummaryModal'
@@ -16,10 +17,34 @@ import { Typography } from '@mui/material'
 export default function Historico() {
     const { user } = useAuth()
     const theme = useTheme()
+    const currentMonth = dayjs('2026-01-01')
     const isMobile = useMediaQuery(theme.breakpoints.down('md'))
-    const history = user?.historico || []
+    const history = useMemo(
+        () => user?.historico || [],
+        [user]
+    )
 
     const [selectedDay, setSelectedDay] = useState(null)
+    const challenges = user?.challenges || []
+
+    const [selectedCofres, setSelectedCofres] = useState(
+        challenges.map(c => c.id)
+    )
+
+    const toggleCofre = cofreId => {
+        setSelectedCofres(prev =>
+            prev.includes(cofreId)
+                ? prev.filter(id => id !== cofreId)
+                : [...prev, cofreId]
+        )
+    }
+
+    const filteredHistory = useMemo(() => {
+        const filtered = history.filter(item =>
+            selectedCofres.includes(item.challengeId)
+        )
+        return filtered
+    }, [history, selectedCofres])
 
     /* ===============================
        NORMALIZA + AGRUPA POR DIA
@@ -27,16 +52,14 @@ export default function Historico() {
     const historyByDay = useMemo(() => {
         const map = {}
 
-        history.forEach(item => {
+        filteredHistory.forEach(item => {
             const day = dayjs(item.date).format('YYYY-MM-DD')
-
             if (!map[day]) map[day] = []
-
             map[day].push(item)
         })
 
         return map
-    }, [history])
+    }, [filteredHistory])
 
     const selectedItems = selectedDay
         ? historyByDay[selectedDay]
@@ -46,8 +69,17 @@ export default function Historico() {
         <Layout>
             <div className="historico-page">
 
+                <CofreFilter
+                    challenges={challenges}
+                    selectedCofres={selectedCofres}
+                    onToggle={toggleCofre}
+                />
+
                 {/* RESUMO DO MÊS */}
-                <MonthSummaryCard history={history} />
+                <MonthSummaryCard
+                    history={filteredHistory}
+                    month={currentMonth}
+                />
 
                 {/* CALENDÁRIO */}
                 {isMobile ? (
