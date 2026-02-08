@@ -161,13 +161,27 @@
 
 .cofre-filter-scroll {
   display: flex;
-  gap: 12px;
+  gap: 6px;
   overflow-x: auto;
   padding: 6px 4px;
+  flex: 1;
 
-  scrollbar-width: none;
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db transparent;
+
   &::-webkit-scrollbar {
-    display: none;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 4px;
+  }
+
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
   }
 }
 
@@ -185,6 +199,21 @@
     background: #22c55e;
     color: #fff;
   }
+}
+
+.cofre-filter-header {
+  display: flex !important;
+  align-items: center;
+  gap: 12px;
+}
+
+.year-selector {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 @media (max-width: 768px) {

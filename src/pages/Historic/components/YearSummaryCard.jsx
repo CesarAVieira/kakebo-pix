@@ -1,26 +1,26 @@
-import { Box, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import dayjs from 'dayjs'
 
-export default function MonthSummaryCard({ history, month }) {
-    const startOfMonth = month.startOf('month')
-    const endOfMonth = month.endOf('month')
+export default function YearSummaryCard({ history, year }) {
+    const startOfYear = dayjs(`${year}-01-01`).startOf('year')
+    const endOfYear = dayjs(`${year}-12-31`).endOf('year')
 
-    const monthItems = history.filter(h => {
+    const yearItems = history.filter(h => {
         const date = dayjs(h.date || h.data)
         if (!date.isValid()) return false
-        return date >= startOfMonth && date <= endOfMonth
+        return date >= startOfYear && date <= endOfYear
     })
 
-    const total = monthItems.reduce(
+    const total = yearItems.reduce(
         (s, i) => s + (Number(i.value) || Number(i.valor) || 0),
         0
     )
-    const xp = monthItems.reduce(
+    const xp = yearItems.reduce(
         (s, i) => s + (Number(i.xp) || 0),
         0
     )
     const days = new Set(
-        monthItems.map(i =>
+        yearItems.map(i =>
             dayjs(i.date || i.data).format('DD')
         )
     ).size
@@ -41,7 +41,7 @@ export default function MonthSummaryCard({ history, month }) {
                     <strong className="summary-value">
                         {days}
                     </strong>
-                    <span className="summary-label">Dias depósitados</span>
+                    <span className="summary-label">Dias depositados</span>
                 </Box>
 
                 <Box className="summary-item xp">
