@@ -224,34 +224,19 @@
 }
 
 @media (max-width: 768px) {
+  .summary-icon {
+    display: none;
+  }
+
   .summary-value {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 
-  .year-summary {
-    padding: 12px 14px;
-    margin-bottom: 16px;
-  }
-
-  .year-summary-grid {
-    gap: 10px;
-  }
-
-  .year-summary-item {
-    min-height: 70px;
-    padding: 10px 8px;
-  }
-
-  .year-summary-value {
-    font-size: 1.05rem;
-    white-space: nowrap;
-  }
-
-  .year-summary-label {
+  .summary-label {
     font-size: 0.65rem;
   }
 
-  .year-summary-icon {
+  .summary-icon {
     font-size: 1rem;
   }
 
@@ -265,7 +250,32 @@
 }
 
 @media (max-width: 480px) {
-  .year-summary-value {
-    font-size: 1rem;
+  .summary-icon {
+    display: none;
+  }
+
+  .summary-value {
+    font-size: 0.9rem;
+  }
+
+  .summary-label {
+    font-size: 0.6rem; // Ainda menor
+  }
+
+  .summary-icon {
+    font-size: 0.9rem;
+  }
+
+  .month-summary {
+    padding: 12px 14px;
+  }
+
+  .month-summary-grid {
+    gap: 8px;
+  }
+
+  .summary-item {
+    min-height: 70px;
+    padding: 10px 8px;
   }
 }
