@@ -15,7 +15,7 @@ const rarityColors = {
   legendary: '#f59e0b'
 }
 
-export default function MonthCalendar({
+export default function Calendar({
   month,
   historyByDay,
   onSelectDay

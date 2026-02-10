@@ -3,7 +3,6 @@ import { useAuth } from '../../context/AuthContext'
 import '../../styles/Historico.scss'
 
 import { useMemo, useState } from 'react'
-import { Select, MenuItem } from '@mui/material'
 import dayjs from 'dayjs'
 
 import CofreFilter from './components/CofreFilter'

@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import MonthCalendar from './MonthCalendar'
+import Calendar from './Calendar'
 
 export default function YearCalendar({
     historyByDay,
@@ -14,7 +14,7 @@ export default function YearCalendar({
     return (
         <div className="year-calendar">
             {months.map(month => (
-                <MonthCalendar
+                <Calendar
                     key={month.month()}
                     month={month}
                     historyByDay={historyByDay}
