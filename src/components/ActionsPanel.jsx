@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../context/useAuth'
 
-export default function ActionsPanel() {
+export default function ActionsPanel({ canEditChallenge, onEditChallenge }) {
     const navigate = useNavigate()
     const { user } = useAuth()
 
@@ -9,7 +9,7 @@ export default function ActionsPanel() {
 
     return (
         <div className="grid-info-panel actions-panel">
-            <h3>Ações</h3>
+            <h3>Acoes</h3>
 
             <div className="actions-list">
                 <button
@@ -22,13 +22,17 @@ export default function ActionsPanel() {
                 </button>
 
                 <button
-                    className="action-button disabled"
-                    disabled
-                    title="Em breve"
+                    className={`action-button ${canEditChallenge ? '' : 'disabled'}`}
+                    disabled={!canEditChallenge}
+                    title={
+                        canEditChallenge
+                            ? 'Editar cofre'
+                            : 'Disponivel apenas antes do primeiro pagamento'
+                    }
+                    onClick={onEditChallenge}
                 >
                     Editar Cofre
                 </button>
-
             </div>
         </div>
     )

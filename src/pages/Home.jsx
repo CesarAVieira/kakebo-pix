@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../context/useAuth'
 import '../styles/home.scss'
 import logo from '../assets/logo.png'
 import coinImg from '../assets/coin.png'
@@ -73,12 +73,11 @@ export default function Home() {
         return () => observer.disconnect()
     }, [])
 
-    const isMobile = window.matchMedia('(max-width: 768px)').matches
-
     useEffect(() => {
         const container = document.querySelector('.coins-background')
         if (!container) return
 
+        const isMobile = window.matchMedia('(max-width: 768px)').matches
         const MAX_COINS = isMobile ? 4 : 14
 
         const coins = []

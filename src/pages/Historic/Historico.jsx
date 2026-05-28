@@ -1,5 +1,5 @@
 import Layout from '../../Layout/Layout.jsx'
-import { useAuth } from '../../context/AuthContext'
+import { useAuth } from '../../context/useAuth'
 import '../../styles/Historico.scss'
 
 import { useMemo, useState } from 'react'
@@ -30,17 +30,26 @@ export default function Historico() {
     }, [history])
 
     const [selectedDay, setSelectedDay] = useState(null)
-    const challenges = user?.challenges || []
-
-    const [selectedCofres, setSelectedCofres] = useState(
-        challenges.map(c => c.id)
+    const challenges = useMemo(
+        () => user?.challenges || [],
+        [user?.challenges]
     )
+    const challengeIds = useMemo(
+        () => challenges.map(c => c.id),
+        [challenges]
+    )
+    const [selectedCofres, setSelectedCofres] = useState(null)
+    const activeSelectedCofres = useMemo(() => {
+        if (!selectedCofres) return challengeIds
+
+        return selectedCofres.filter(id => challengeIds.includes(id))
+    }, [challengeIds, selectedCofres])
 
     const toggleCofre = cofreId => {
         setSelectedCofres(prev =>
-            prev.includes(cofreId)
-                ? prev.filter(id => id !== cofreId)
-                : [...prev, cofreId]
+            (prev || challengeIds).includes(cofreId)
+                ? (prev || challengeIds).filter(id => id !== cofreId)
+                : [...(prev || challengeIds), cofreId]
         )
     }
 
@@ -49,11 +58,11 @@ export default function Historico() {
             const date = dayjs(item.date || item.data)
 
             return (
-                selectedCofres.includes(item.challengeId) &&
+                activeSelectedCofres.includes(item.challengeId) &&
                 date.year() === selectedYear
             )
         })
-    }, [history, selectedCofres, selectedYear])
+    }, [activeSelectedCofres, history, selectedYear])
 
     /* ===============================
        NORMALIZA + AGRUPA POR DIA
@@ -80,7 +89,7 @@ export default function Historico() {
 
                 <CofreFilter
                     challenges={challenges}
-                    selectedCofres={selectedCofres}
+                    selectedCofres={activeSelectedCofres}
                     onToggle={toggleCofre}
                     year={selectedYear}
                     onYearChange={setSelectedYear}
@@ -96,6 +105,7 @@ export default function Historico() {
                 {/* CALENDÁRIO */}
                 {isMobile ? (
                     <MobileCalendar
+                        referenceMonth={dayjs().year(selectedYear)}
                         historyByDay={historyByDay}
                         onSelectDay={setSelectedDay}
                     />

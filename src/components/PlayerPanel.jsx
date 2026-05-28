@@ -1,4 +1,4 @@
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../context/useAuth'
 import Avatar from './avatar/Avatar'
 import { getXpForNextLevel } from '../utils/gamification'
 

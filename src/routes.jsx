@@ -8,7 +8,7 @@ import Configuracoes from './pages/Configuracoes'
 import Grid from './components/Grid'
 import ProtectedRoute from './routes/ProtectedRoute'
 
-import { useAuth } from './context/AuthContext'
+import { useAuth } from './context/useAuth'
 
 export default function AppRoutes() {
     const { user } = useAuth()

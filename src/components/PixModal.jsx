@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { QRCodeCanvas } from 'qrcode.react'
 import { gerarPixPayload } from '../utils/pixPayload'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../context/useAuth'
 import '../styles/PixModal.scss'
 
 export default function PixModal({ value, onClose, onConfirm }) {

@@ -9,14 +9,22 @@ import Switch from '@mui/material/Switch'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Stack from '@mui/material/Stack'
 import Alert from '@mui/material/Alert'
+import { validateChallengeConfig } from '../utils/generateValues'
 
-export default function CreateChallengeModal({ onClose, onCreate }) {
-    const [title, setTitle] = useState('')
-    const [subtitle, setSubtitle] = useState('')
-    const [totalAmount, setTotalAmount] = useState('')
+export default function CreateChallengeModal({
+    initialChallenge = null,
+    onClose,
+    onCreate
+}) {
+    const isEditing = Boolean(initialChallenge)
+    const [title, setTitle] = useState(initialChallenge?.title || '')
+    const [subtitle, setSubtitle] = useState(initialChallenge?.subtitle || '')
+    const [totalAmount, setTotalAmount] = useState(
+        initialChallenge?.total?.toString() || ''
+    )
     const [useCustomRange, setUseCustomRange] = useState(false)
-    const [minValue, setMinValue] = useState(10)
-    const [maxValue, setMaxValue] = useState(200)
+    const [minValue, setMinValue] = useState(initialChallenge?.min || 10)
+    const [maxValue, setMaxValue] = useState(initialChallenge?.max || 200)
     const [error, setError] = useState('')
 
     const handleSubmit = () => {
@@ -25,13 +33,16 @@ export default function CreateChallengeModal({ onClose, onCreate }) {
             return
         }
 
-        if (!totalAmount || Number(totalAmount) <= 0) {
-            setError('Informe um valor total válido')
-            return
-        }
+        const nextMinValue = isEditing || useCustomRange ? Number(minValue) : 10
+        const nextMaxValue = isEditing || useCustomRange ? Number(maxValue) : 200
+        const configError = validateChallengeConfig({
+            total: totalAmount,
+            min: nextMinValue,
+            max: nextMaxValue
+        })
 
-        if (useCustomRange && minValue >= maxValue) {
-            setError('O valor mínimo deve ser menor que o máximo')
+        if (configError) {
+            setError(configError)
             return
         }
 
@@ -41,8 +52,8 @@ export default function CreateChallengeModal({ onClose, onCreate }) {
             title: title.trim(),
             subtitle: subtitle.trim(),
             totalAmount: Number(totalAmount),
-            minValue: useCustomRange ? Number(minValue) : 10,
-            maxValue: useCustomRange ? Number(maxValue) : 200
+            minValue: nextMinValue,
+            maxValue: nextMaxValue
         })
     }
 
@@ -53,7 +64,9 @@ export default function CreateChallengeModal({ onClose, onCreate }) {
             fullWidth
             maxWidth="sm"
         >
-            <DialogTitle>Criar novo cofre</DialogTitle>
+            <DialogTitle>
+                {isEditing ? 'Editar cofre' : 'Criar novo cofre'}
+            </DialogTitle>
 
             <DialogContent>
                 <Stack spacing={2} mt={1}>
@@ -70,7 +83,7 @@ export default function CreateChallengeModal({ onClose, onCreate }) {
                     />
 
                     <TextField
-                        label="Descrição do cofre (opcional)"
+                        label="Descricao do cofre (opcional)"
                         value={subtitle}
                         onChange={e => setSubtitle(e.target.value)}
                         fullWidth
@@ -87,22 +100,24 @@ export default function CreateChallengeModal({ onClose, onCreate }) {
                         fullWidth
                     />
 
-                    <FormControlLabel
-                        control={
-                            <Switch
-                                checked={useCustomRange}
-                                onChange={e =>
-                                    setUseCustomRange(e.target.checked)
-                                }
-                            />
-                        }
-                        label="Configurar valores mínimos e máximos"
-                    />
+                    {!isEditing && (
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={useCustomRange}
+                                    onChange={e =>
+                                        setUseCustomRange(e.target.checked)
+                                    }
+                                />
+                            }
+                            label="Configurar valores minimos e maximos"
+                        />
+                    )}
 
-                    {useCustomRange && (
+                    {!isEditing && useCustomRange && (
                         <Stack direction="row" spacing={2}>
                             <TextField
-                                label="Valor mínimo"
+                                label="Valor minimo"
                                 type="number"
                                 value={minValue}
                                 onChange={e => setMinValue(e.target.value)}
@@ -110,7 +125,7 @@ export default function CreateChallengeModal({ onClose, onCreate }) {
                             />
 
                             <TextField
-                                label="Valor máximo"
+                                label="Valor maximo"
                                 type="number"
                                 value={maxValue}
                                 onChange={e => setMaxValue(e.target.value)}
@@ -131,7 +146,7 @@ export default function CreateChallengeModal({ onClose, onCreate }) {
                     color="success"
                     onClick={handleSubmit}
                 >
-                    Criar cofre
+                    {isEditing ? 'Salvar alteracoes' : 'Criar cofre'}
                 </Button>
             </DialogActions>
         </Dialog>

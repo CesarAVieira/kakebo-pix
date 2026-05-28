@@ -2,11 +2,10 @@ import dayjs from 'dayjs'
 import Calendar from './Calendar'
 
 export default function YearCalendar({
+    year,
     historyByDay,
     onSelectDay
 }) {
-    const year = dayjs().year()
-
     const months = Array.from({ length: 12 }, (_, i) =>
         dayjs().year(year).month(i)
     )

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import styles from './Login.module.scss'
-import { useAuth } from '../../context/AuthContext'
+import { useAuth } from '../../context/useAuth'
 import { useNavigate } from 'react-router-dom'
 
 export default function Login() {
@@ -24,7 +24,7 @@ export default function Login() {
 
     useEffect(() => {
         if (user) {
-            navigate('/')
+            navigate('/dashboard', { replace: true })
         }
     }, [user, navigate])
 

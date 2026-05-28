@@ -1,20 +1,24 @@
 import { useEffect, useRef, useState } from 'react'
 import Layout from '../Layout/Layout'
 import { useParams } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../context/useAuth'
 import { getRandomIndex } from '../utils/random'
+import generateValues from '../utils/generateValues'
 import {
     XP_BY_RARITY,
     applyXpProgress
 } from '../utils/gamification'
 import Fab from '@mui/material/Fab'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
+import Snackbar from '@mui/material/Snackbar'
+import Alert from '@mui/material/Alert'
 import ProgressPanel from '../components/ProgressPanel'
 import InfoPanel from '../components/InfoPanel'
 import ActionsPanel from '../components/ActionsPanel'
 import PlayerPanel from '../components/PlayerPanel'
 import XpFloat from '../components/XpFloat'
 import LevelUpModal from '../components/LevelUpModal'
+import CreateChallengeModal from '../components/CreateChallengeModal'
 import Cell from './Cell'
 import PixModal from './PixModal'
 import ScratchCard from '../components/ScratchCard'
@@ -32,6 +36,12 @@ export default function Grid() {
     const [levelUp, setLevelUp] = useState(null)
 
     const [selectedCell, setSelectedCell] = useState(null)
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+    const [snackbar, setSnackbar] = useState({
+        open: false,
+        message: '',
+        severity: 'success'
+    })
     const gridScrollRef = useRef(null)
     const [showScrollTop, setShowScrollTop] = useState(false)
 
@@ -148,6 +158,61 @@ export default function Grid() {
         total > 0
             ? Math.round((paidValue / total) * 100)
             : 0
+
+    const hasAnyPayment = challenge.grid.some(cell => cell.paid)
+    const canEditChallenge = !hasAnyPayment
+
+    const handleUpdateChallenge = async (data) => {
+        if (!canEditChallenge) {
+            setSnackbar({
+                open: true,
+                message: 'Este cofre ja recebeu pagamentos e nao pode ser editado',
+                severity: 'warning'
+            })
+            setIsEditModalOpen(false)
+            return
+        }
+
+        let grid
+
+        try {
+            grid = generateValues({
+                total: data.totalAmount,
+                min: challenge.min,
+                max: challenge.max
+            })
+        } catch (err) {
+            setSnackbar({
+                open: true,
+                message: err.message || 'Nao foi possivel editar o cofre',
+                severity: 'error'
+            })
+            return
+        }
+
+        const updatedChallenges = challenges.map(c => {
+            if (c.id !== id) return c
+
+            return {
+                ...c,
+                title: data.title,
+                subtitle: data.subtitle || '',
+                total: data.totalAmount,
+                grid,
+                scratch: null,
+                updatedAt: new Date().toISOString()
+            }
+        })
+
+        await updateUser({ challenges: updatedChallenges })
+
+        setIsEditModalOpen(false)
+        setSnackbar({
+            open: true,
+            message: 'Cofre atualizado com sucesso',
+            severity: 'success'
+        })
+    }
 
     /* ===============================
        PAGAMENTO
@@ -329,7 +394,10 @@ export default function Grid() {
                         </div>
 
                         <div className="panel-actions compact">
-                            <ActionsPanel challenge={challenge} />
+                            <ActionsPanel
+                                canEditChallenge={canEditChallenge}
+                                onEditChallenge={() => setIsEditModalOpen(true)}
+                            />
                         </div>
 
                         <div className="panel-info">
@@ -431,6 +499,42 @@ export default function Grid() {
                         onConfirm={confirmPayment}
                     />
                 )}
+
+                {isEditModalOpen && (
+                    <CreateChallengeModal
+                        initialChallenge={challenge}
+                        onClose={() => setIsEditModalOpen(false)}
+                        onCreate={handleUpdateChallenge}
+                    />
+                )}
+
+                <Snackbar
+                    open={snackbar.open}
+                    autoHideDuration={3000}
+                    onClose={() =>
+                        setSnackbar({
+                            ...snackbar,
+                            open: false
+                        })
+                    }
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'center'
+                    }}
+                >
+                    <Alert
+                        onClose={() =>
+                            setSnackbar({
+                                ...snackbar,
+                                open: false
+                            })
+                        }
+                        severity={snackbar.severity}
+                        variant="filled"
+                    >
+                        {snackbar.message}
+                    </Alert>
+                </Snackbar>
             </div>
 
             {/* ===============================

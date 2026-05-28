@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Layout from '../Layout/Layout'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../context/useAuth'
 import generateValues from '../utils/generateValues'
 import CreateChallengeModal from '../components/CreateChallengeModal'
 import Button from '@mui/material/Button'
@@ -24,7 +24,6 @@ export default function Dashboard() {
 
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [challengeToDelete, setChallengeToDelete] = useState(null)
-    const [snackbarOpen, setSnackbarOpen] = useState(false)
     const [snackbar, setSnackbar] = useState({
         open: false,
         message: '',
@@ -36,18 +35,29 @@ export default function Dashboard() {
             .filter(cell => cell.paid)
             .reduce((sum, cell) => sum + cell.value, 0)
 
-        const percentage = Math.min((paid / total) * 100, 100)
+        const percentage = total > 0 ? Math.min((paid / total) * 100, 100) : 0
         const completed = paid >= total
 
         return { paid, percentage, completed }
     }
 
     const handleCreateChallenge = async (data) => {
-        const grid = generateValues({
-            total: data.totalAmount,
-            min: data.minValue,
-            max: data.maxValue
-        })
+        let grid
+
+        try {
+            grid = generateValues({
+                total: data.totalAmount,
+                min: data.minValue,
+                max: data.maxValue
+            })
+        } catch (err) {
+            setSnackbar({
+                open: true,
+                message: err.message || 'Nao foi possivel criar o cofre',
+                severity: 'error'
+            })
+            return
+        }
 
         const newChallenge = {
             id: Date.now().toString(),
@@ -65,13 +75,11 @@ export default function Dashboard() {
         })
 
         setIsModalOpen(false)
-
         setSnackbar({
             open: true,
             message: 'Cofre criado com sucesso',
             severity: 'success'
         })
-
         navigate(`/challenge/${newChallenge.id}`)
     }
 
@@ -100,10 +108,9 @@ export default function Dashboard() {
         })
 
         setChallengeToDelete(null)
-
         setSnackbar({
             open: true,
-            message: 'Cofre excluído com sucesso',
+            message: 'Cofre excluido com sucesso',
             severity: 'success'
         })
     }
@@ -111,13 +118,12 @@ export default function Dashboard() {
     return (
         <Layout>
             <div className="dashboard-content">
-                {/* HEADER */}
                 <div className="dashboard-header">
                     <div className="title">
                         <h1>Meus Cofres</h1>
                         <p>
                             Bem-vindo,{' '}
-                            <strong>{user?.username || 'Usuário'}</strong>.
+                            <strong>{user?.username || 'Usuario'}</strong>.
                             Gerencie seus cofres de economia
                         </p>
                     </div>
@@ -138,7 +144,6 @@ export default function Dashboard() {
                     </Button>
                 </div>
 
-                {/* GRID */}
                 <div className="challenge-grid">
                     {challenges.map(challenge => {
                         const { paid, percentage, completed } =
@@ -157,11 +162,10 @@ export default function Dashboard() {
                                     )
                                 }
                             >
-                                {/* BOTÃO EXCLUIR */}
                                 <Tooltip
                                     title={
                                         completed
-                                            ? 'Cofre concluído não pode ser excluído'
+                                            ? 'Cofre concluido nao pode ser excluido'
                                             : 'Excluir cofre'
                                     }
                                 >
@@ -182,7 +186,6 @@ export default function Dashboard() {
                                     </span>
                                 </Tooltip>
 
-                                {/* HEADER DO CARD */}
                                 <div className="card-header">
                                     <h3>{challenge.title}</h3>
                                     <span className="subtitle">
@@ -191,7 +194,6 @@ export default function Dashboard() {
                                     </span>
                                 </div>
 
-                                {/* PROGRESS INFO */}
                                 <div className="progress-info">
                                     <span>Progresso</span>
                                     <span className="amount">
@@ -200,7 +202,6 @@ export default function Dashboard() {
                                     </span>
                                 </div>
 
-                                {/* BARRA */}
                                 <div className="progress">
                                     <div
                                         className="bar"
@@ -210,7 +211,6 @@ export default function Dashboard() {
                                     />
                                 </div>
 
-                                {/* FOOTER */}
                                 <div className="card-footer">
                                     <span>Status</span>
                                     <span
@@ -220,7 +220,7 @@ export default function Dashboard() {
                                             }`}
                                     >
                                         {completed
-                                            ? 'Concluído'
+                                            ? 'Concluido'
                                             : 'Ativo'}
                                     </span>
                                 </div>
@@ -230,7 +230,6 @@ export default function Dashboard() {
                 </div>
             </div>
 
-            {/* MODAL DE CRIAÇÃO */}
             {isModalOpen && (
                 <CreateChallengeModal
                     onClose={() => setIsModalOpen(false)}
@@ -238,7 +237,6 @@ export default function Dashboard() {
                 />
             )}
 
-            {/* DIALOG DE CONFIRMAÇÃO */}
             <Dialog
                 open={Boolean(challengeToDelete)}
                 onClose={() => setChallengeToDelete(null)}
@@ -252,7 +250,7 @@ export default function Dashboard() {
                     </strong>
                     ?
                     <br />
-                    Essa ação não poderá ser desfeita.
+                    Essa acao nao podera ser desfeita.
                 </DialogContent>
 
                 <DialogActions>
@@ -273,27 +271,6 @@ export default function Dashboard() {
                     </Button>
                 </DialogActions>
             </Dialog>
-
-            {/* SNACKBARS */}
-            <Snackbar
-                open={snackbarOpen}
-                autoHideDuration={3000}
-                onClose={() => setSnackbarOpen(false)}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'center'
-                }}
-            >
-                <Alert
-                    onClose={() =>
-                        setSnackbarOpen(false)
-                    }
-                    severity="success"
-                    variant="filled"
-                >
-                    Cofre excluído com sucesso
-                </Alert>
-            </Snackbar>
 
             <Snackbar
                 open={snackbar.open}
