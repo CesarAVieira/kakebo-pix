@@ -24,7 +24,7 @@ export default function Navbar() {
     const handleLogout = async () => {
         await logout()
         setOpen(false)
-        navigate('/', { replace: true })
+        window.location.replace('/')
     }
 
     const navItems = [
