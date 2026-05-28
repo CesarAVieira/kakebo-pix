@@ -1,11 +1,12 @@
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import LoadingScreen from '../components/LoadingScreen'
 
 export default function ProtectedRoute({ children }) {
     const { user, loading } = useAuth()
 
     if (loading) {
-        return <p>Carregando...</p>
+        return <LoadingScreen />
     }
 
     if (!user) {
