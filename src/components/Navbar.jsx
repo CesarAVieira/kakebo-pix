@@ -23,7 +23,8 @@ export default function Navbar() {
 
     const handleLogout = async () => {
         await logout()
-        navigate('/login')
+        setOpen(false)
+        navigate('/', { replace: true })
     }
 
     const navItems = [
