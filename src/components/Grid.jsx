@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import { useAuth } from '../context/useAuth'
 import { getRandomIndex } from '../utils/random'
 import generateValues from '../utils/generateValues'
+import { hasChallengePayments, isCellPaid } from '../utils/challengeStatus'
 import {
     XP_BY_RARITY,
     applyXpProgress
@@ -116,7 +117,7 @@ export default function Grid() {
 
         const unpaidCells = challenge.grid
             .map((cell, index) => ({ ...cell, index }))
-            .filter(cell => !cell.paid)
+            .filter(cell => !isCellPaid(cell))
 
         if (unpaidCells.length === 0) {
             alert('Não há valores pendentes 🎉')
@@ -151,7 +152,7 @@ export default function Grid() {
     const total = challenge.total || 0
 
     const paidValue = challenge.grid
-        .filter(cell => cell.paid)
+        .filter(isCellPaid)
         .reduce((sum, cell) => sum + cell.value, 0)
 
     const progress =
@@ -159,8 +160,10 @@ export default function Grid() {
             ? Math.round((paidValue / total) * 100)
             : 0
 
-    const hasAnyPayment = challenge.grid.some(cell => cell.paid)
-    const canEditChallenge = !hasAnyPayment
+    const canEditChallenge = !hasChallengePayments(
+        challenge,
+        user.historico || []
+    )
 
     const handleUpdateChallenge = async (data) => {
         if (!canEditChallenge) {
@@ -415,7 +418,7 @@ export default function Grid() {
                                 <Cell
                                     key={index}
                                     value={cell.value}
-                                    paid={cell.paid}
+                                    paid={isCellPaid(cell)}
                                     rarity={
                                         cell.value >= challenge.max * 0.9
                                             ? 'legendary'
@@ -424,7 +427,7 @@ export default function Grid() {
                                                 : 'common'
                                     }
                                     onClick={(e) => {
-                                        if (cell.paid) return
+                                        if (isCellPaid(cell)) return
 
                                         const rect = e.currentTarget.getBoundingClientRect()
 

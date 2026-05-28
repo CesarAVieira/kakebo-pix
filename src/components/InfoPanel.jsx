@@ -1,7 +1,9 @@
+import { isCellPaid } from '../utils/challengeStatus'
+
 export default function InfoPanel({ challenge }) {
     const currency = challenge.currency || 'R$'
     const completed =
-        challenge.grid.every(cell => cell.paid)
+        challenge.grid.every(isCellPaid)
 
     return (
         <div className="grid-info-panel info-panel">

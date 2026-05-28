@@ -1,8 +1,10 @@
+import { isCellPaid } from '../utils/challengeStatus'
+
 export default function ProgressPanel({ challenge }) {
     const total = challenge.total || 0
 
     const paidValue = challenge.grid
-        .filter(cell => cell.paid)
+        .filter(isCellPaid)
         .reduce((sum, cell) => sum + cell.value, 0)
 
     const remaining = total - paidValue

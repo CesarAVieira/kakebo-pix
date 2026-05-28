@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import Layout from '../Layout/Layout'
 import { useAuth } from '../context/useAuth'
 import generateValues from '../utils/generateValues'
+import { isCellPaid } from '../utils/challengeStatus'
 import CreateChallengeModal from '../components/CreateChallengeModal'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
@@ -32,7 +33,7 @@ export default function Dashboard() {
 
     const calculateProgress = (grid, total) => {
         const paid = grid
-            .filter(cell => cell.paid)
+            .filter(isCellPaid)
             .reduce((sum, cell) => sum + cell.value, 0)
 
         const percentage = total > 0 ? Math.min((paid / total) * 100, 100) : 0
