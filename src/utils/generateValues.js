@@ -1,7 +1,7 @@
 const DEFAULT_GRID_SIZE = 256
+export const AVAILABLE_CHALLENGE_TOTALS = [10000, 15000, 20000]
 
-const toCents = value => Math.round(Number(value) * 100)
-const fromCents = value => Number((value / 100).toFixed(2))
+const toInteger = value => Number(value)
 
 export function getChallengeValueLimits({
   min = 10,
@@ -30,6 +30,14 @@ export function validateChallengeConfig({
 
   if (!Number.isFinite(numericMin) || !Number.isFinite(numericMax)) {
     return 'Informe valores minimos e maximos validos'
+  }
+
+  if (
+    !Number.isInteger(numericTotal) ||
+    !Number.isInteger(numericMin) ||
+    !Number.isInteger(numericMax)
+  ) {
+    return 'Os valores do cofre precisam ser inteiros'
   }
 
   if (numericMin <= 0 || numericMax <= 0 || numericMin >= numericMax) {
@@ -65,16 +73,16 @@ export default function generateValues({
     throw new Error(error)
   }
 
-  const totalCents = toCents(total)
-  const minCents = toCents(min)
-  const maxCents = toCents(max)
-  const values = Array.from({ length: size }, () => minCents)
+  const totalValue = toInteger(total)
+  const minValue = toInteger(min)
+  const maxValue = toInteger(max)
+  const values = Array.from({ length: size }, () => minValue)
 
-  let remaining = totalCents - size * minCents
+  let remaining = totalValue - size * minValue
 
   while (remaining > 0) {
     const index = Math.floor(Math.random() * size)
-    const room = maxCents - values[index]
+    const room = maxValue - values[index]
 
     if (room <= 0) continue
 
@@ -90,7 +98,7 @@ export default function generateValues({
 
   return values.map((value, index) => ({
     id: index,
-    value: fromCents(value),
+    value,
     paid: false,
   }))
 }

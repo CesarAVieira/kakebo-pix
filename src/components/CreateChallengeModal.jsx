@@ -5,11 +5,13 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
-import Switch from '@mui/material/Switch'
-import FormControlLabel from '@mui/material/FormControlLabel'
 import Stack from '@mui/material/Stack'
 import Alert from '@mui/material/Alert'
-import { validateChallengeConfig } from '../utils/generateValues'
+import MenuItem from '@mui/material/MenuItem'
+import {
+    AVAILABLE_CHALLENGE_TOTALS,
+    validateChallengeConfig
+} from '../utils/generateValues'
 
 export default function CreateChallengeModal({
     initialChallenge = null,
@@ -20,12 +22,19 @@ export default function CreateChallengeModal({
     const [title, setTitle] = useState(initialChallenge?.title || '')
     const [subtitle, setSubtitle] = useState(initialChallenge?.subtitle || '')
     const [totalAmount, setTotalAmount] = useState(
-        initialChallenge?.total?.toString() || ''
+        initialChallenge?.total?.toString() ||
+        AVAILABLE_CHALLENGE_TOTALS[0].toString()
     )
-    const [useCustomRange, setUseCustomRange] = useState(false)
-    const [minValue, setMinValue] = useState(initialChallenge?.min || 10)
-    const [maxValue, setMaxValue] = useState(initialChallenge?.max || 200)
     const [error, setError] = useState('')
+    const minValue = initialChallenge?.min || 10
+    const maxValue = initialChallenge?.max || 200
+    const numericTotalAmount = Number(totalAmount)
+    const totalOptions =
+        isEditing &&
+            Number.isFinite(numericTotalAmount) &&
+            !AVAILABLE_CHALLENGE_TOTALS.includes(numericTotalAmount)
+            ? [numericTotalAmount, ...AVAILABLE_CHALLENGE_TOTALS]
+            : AVAILABLE_CHALLENGE_TOTALS
 
     const handleSubmit = () => {
         if (!title.trim()) {
@@ -33,8 +42,8 @@ export default function CreateChallengeModal({
             return
         }
 
-        const nextMinValue = isEditing || useCustomRange ? Number(minValue) : 10
-        const nextMaxValue = isEditing || useCustomRange ? Number(maxValue) : 200
+        const nextMinValue = isEditing ? Number(minValue) : 10
+        const nextMaxValue = isEditing ? Number(maxValue) : 200
         const configError = validateChallengeConfig({
             total: totalAmount,
             min: nextMinValue,
@@ -90,49 +99,21 @@ export default function CreateChallengeModal({
                     />
 
                     <TextField
+                        select
                         label="Valor total do cofre"
-                        type="number"
                         value={totalAmount}
                         onChange={e => {
                             setTotalAmount(e.target.value)
                             setError('')
                         }}
                         fullWidth
-                    />
-
-                    {!isEditing && (
-                        <FormControlLabel
-                            control={
-                                <Switch
-                                    checked={useCustomRange}
-                                    onChange={e =>
-                                        setUseCustomRange(e.target.checked)
-                                    }
-                                />
-                            }
-                            label="Configurar valores minimos e maximos"
-                        />
-                    )}
-
-                    {!isEditing && useCustomRange && (
-                        <Stack direction="row" spacing={2}>
-                            <TextField
-                                label="Valor minimo"
-                                type="number"
-                                value={minValue}
-                                onChange={e => setMinValue(e.target.value)}
-                                fullWidth
-                            />
-
-                            <TextField
-                                label="Valor maximo"
-                                type="number"
-                                value={maxValue}
-                                onChange={e => setMaxValue(e.target.value)}
-                                fullWidth
-                            />
-                        </Stack>
-                    )}
+                    >
+                        {totalOptions.map(value => (
+                            <MenuItem key={value} value={value.toString()}>
+                                R$ {value.toLocaleString('pt-BR')}
+                            </MenuItem>
+                        ))}
+                    </TextField>
                 </Stack>
             </DialogContent>
 
