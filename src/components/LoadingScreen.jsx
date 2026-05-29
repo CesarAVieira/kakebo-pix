@@ -1,34 +1,25 @@
-import logo from '../assets/logo.png'
+import pork from '../assets/pork.png'
 import '../styles/LoadingScreen.scss'
+
+const MESSAGES = [
+    'Preparando seu cofrinho',
+    'Sincronizando desafios',
+    'Carregando progresso',
+]
 
 export default function LoadingScreen() {
     return (
         <main className="loading-screen" aria-busy="true" aria-live="polite">
-            <div className="loading-glow loading-glow-primary" />
-            <div className="loading-glow loading-glow-secondary" />
-
-            <section className="loading-panel" aria-label="Carregando aplicativo">
-                <div className="loading-logo-wrap">
-                    <div className="loading-progress-ring" />
-                    <img src={logo} alt="Kakebo Pix" className="loading-logo" />
+            <div className="loading-glow" aria-hidden="true" />
+            <img src={pork} alt="Kakebox Pix" className="loading-pig" />
+            <div className="loading-bar-area">
+                <div className="loading-bar-track" aria-hidden="true">
+                    <span className="loading-bar-fill" />
                 </div>
-
-                <div className="loading-copy">
-                    <span className="loading-eyebrow">Kakebo Pix</span>
-                    <h1>Preparando seu cofrinho</h1>
-                    <p>Sincronizando seus desafios e progresso.</p>
-                </div>
-
-                <div className="loading-bar" aria-hidden="true">
-                    <span />
-                </div>
-
-                <div className="loading-steps" aria-hidden="true">
-                    <span />
-                    <span />
-                    <span />
-                </div>
-            </section>
+                <p className="loading-status" id="loading-status">
+                    {MESSAGES[0]}
+                </p>
+            </div>
         </main>
     )
 }
